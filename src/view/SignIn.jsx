@@ -40,11 +40,6 @@ export default function SignIn() {
       })
       .catch(() => setNotification({ active: true, message: "Wrong credentials", severity: 'error' }));
 
-
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   const handleRememberMe = (event) => {

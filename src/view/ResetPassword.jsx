@@ -3,33 +3,23 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import PasswordIcon from '@mui/icons-material/Password';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { useNavigate, useParams } from 'react-router-dom';
+import NotificationContext from '../contexts/notification.context';
+import { useContext } from 'react';
 
 const defaultTheme = createTheme();
 
 export default function ResetPassword() {
+  const { resetKey } = useParams();
+  const navigate = useNavigate();
+  const { notification, setNotification } = useContext(NotificationContext);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,19 +29,18 @@ export default function ResetPassword() {
       headers: { 'Access-Control-Allow-Origin': '*', "Content-Type": 'application/json' },
       url: 'http://localhost:8080/api/account/reset-password/finish',
       data: {
-        password: data.get('password')
+        newPassword: data.get('password'),
+        key: resetKey
       }
     })
       .then((response) => {
         console.log(response.data);
+        setNotification({ message: 'Succesfull reset password! Sign in!', active: false, severity: 'success' });
+        navigate('/sign-in')
       })
       .catch((error) => {
         console.log(error);
       });
-
-    console.log({
-      password: data.get('password')
-    });
   };
 
   return (
@@ -82,6 +71,7 @@ export default function ResetPassword() {
               label="New Password"
               name="password"
               autoComplete="password"
+              type='password'
               autoFocus
             />
             <Button

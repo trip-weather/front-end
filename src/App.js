@@ -18,8 +18,7 @@ import {
 import ForgottenPassword from './view/ForgottenPassword';
 import ResetPassword from './view/ResetPassword';
 import PrivateRoutes from './routes/PrivateRoutes';
-import HotelSection from './layouts/HotelSection';
-import { Typography } from '@mui/material';
+import SearchPage from './view/SearchPage';
 
 
 function App() {
@@ -35,10 +34,11 @@ function App() {
               <Route path='/sign-in' element={<SignIn />} ></Route>
               <Route path='/reset-password' element={<ResetPassword />}></Route>
               <Route path='/forgotten-password' element={<ForgottenPassword />}></Route>
+              <Route path='/reset-password/:resetKey' element={<ResetPassword />}></Route>
             </Route>
             <Route element={<PrivateRoutes />} exact>
               <Route path='/profile' element={<Profile />}></Route>
-              <Route path='/sugestion' element={<HotelSection />}></Route>
+              <Route path='/sugestion' element={<SearchPage />}></Route>
             </Route>
           </Route>
         </Routes>
