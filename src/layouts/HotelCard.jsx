@@ -10,11 +10,30 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Button } from '@mui/material';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
+import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 
 
-export default function HotelCard() {
+export default function HotelCard({ hotel }) {
+  const { name, wishlistName, checkinDate, checkoutDate, photoMainUrl, priceBreakdown, propertyClass, reviewScoreWord } = hotel;
+  const price = priceBreakdown.grossPrice.value.toFixed(2);
+  const currency = priceBreakdown.grossPrice.currency;
+
+  console.log(hotel);
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{
+      maxWidth: 345,
+      border: '1px solid #e0e0e0',
+      borderRadius: '8px',
+      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      backgroundColor: '#f5f5f5',
+      transition: 'box-shadow 0.3s',
+      '&:hover': {
+        boxShadow: '0px 10px 10px rgba(0, 0, 0, 0.2)',
+      },
+    }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -26,22 +45,39 @@ export default function HotelCard() {
             <FavoriteIcon style={{ color: '#FFC0CB' }} />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="10/10/2023 - 12/10/2023"
+        title={name}
+        subheader={`${checkinDate} - ${checkoutDate}`}
       />
+
+      <Box
+        sx={{
+          width: 200,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Rating
+          name="text-feedback"
+          value={propertyClass}
+          readOnly
+          precision={0.5}
+          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+        />
+        <Box sx={{ ml: 2 }}>{reviewScoreWord}</Box>
+      </Box>
+
       <CardMedia
         component="img"
         height="194"
-        image="https://media.istockphoto.com/id/1182393363/photo/alexander-nevsky-cathedral-in-sofia-bulgaria-taken-in-may-2019-taken-in-hdr.jpg?s=612x612&w=0&k=20&c=pxdKXGCg5wnU1cpK-0em0FAISx0aV5o18l2FaU5u94M="
+        image={photoMainUrl}
         alt="Paella dish"
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+        <LocationOnRoundedIcon sx={{ color: red[500] }}/>
+        {wishlistName}
         </Typography>
-        <Typography variant='body4' color="text.secondary"><b> Крайна цена : </b> 1000 BGN</Typography>
+        <Typography variant='body4' color="text.secondary"><b> Крайна цена : </b>{price} {currency}</Typography>
       </CardContent>
       <CardActions>
         <Button variant="outlined" size="small" href="#contained-buttons">

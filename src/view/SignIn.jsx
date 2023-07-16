@@ -27,19 +27,50 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+
+    if (value.length < 5 || value.length > 20) {
+      setEmailError('Username must be between 4 and 20 characters.');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    setPassword(value);
+
+    if (value.length < 5 || value.length > 50) {
+      setPasswordError('Password must be between 4 and 50 characters.');
+    } else {
+      setPasswordError('');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+ 
     const data = new FormData(event.currentTarget);
 
     loginUser(data)
       .then((response) => {
-        storeAuthToken(response.data.id_token);
+        console.log(response);
+        console.log("in login user");
+        storeAuthToken(response.data.idToken);
         updateUserAuth({ ...userAuth, isAuthenticated: true, user: { role: getUserRole, username: getUserName } });
         setNotification({ message: 'Succesfull sign in!', active: true, severity: 'success' });
         navigate('/');
       })
       .catch(() => setNotification({ active: true, message: "Wrong credentials", severity: 'error' }));
-
   };
 
   const handleRememberMe = (event) => {
@@ -70,10 +101,13 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Address or username"
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleEmailChange}
+              error={!!emailError}
+              helperText={emailError}
             />
             <TextField
               margin="normal"
@@ -84,6 +118,9 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handlePasswordChange}
+              error={!!passwordError}
+              helperText={passwordError}
             />
             <FormControlLabel
               control={<Checkbox

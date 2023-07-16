@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import NotificationContext from '../contexts/notification.context';
 
 
@@ -20,9 +20,38 @@ const defaultTheme = createTheme();
 
 
 export default function SignUp() {
-  const { notification, setNotification } = useContext(NotificationContext);
-  
   const navigate = useNavigate();
+
+  const { notification, setNotification } = useContext(NotificationContext);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+
+    if (!value.includes('@')) {
+      setEmailError('Email must contains @.');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    setPassword(value);
+
+    if (value.length < 5 || value.length > 50) {
+      setPasswordError('Password must be between 4 and 50 characters.');
+    } else {
+      setPasswordError('');
+    }
+  };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -101,8 +130,8 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="username"
-                  label="username"
+                  name="sername"
+                  label="Username"
                   id="username"
                   autoComplete="username"
                 />
@@ -115,6 +144,9 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleEmailChange}
+                  error={!!emailError}
+                  helperText={emailError}
                 />
               </Grid>
               <Grid item xs={12}>

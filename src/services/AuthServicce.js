@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import { JWT_LOCAL_STORAGE_KEY } from "../shared/constants";
-// import { AuthDefaults } from "../contexts/auth.context";
+
 
 export const storeAuthToken = (token) => {
     localStorage.setItem(JWT_LOCAL_STORAGE_KEY, token);
@@ -46,9 +46,6 @@ export const getUserName = () => {
     return decoded.sub;
 };
 
-
-
-// не импортвай  AuthDefaults !!!!
 
 
 export const getUpdateAuthState = () => {
