@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import HolidayVillageTwoToneIcon from '@mui/icons-material/HolidayVillageTwoTone';
 import { NavLink } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext, { AuthDefaults } from '../contexts/auth.context';
@@ -47,7 +48,6 @@ function NavigationMenu() {
     };
 
     const logout = () => {
-
         removeAuthToken();
         updateUserAuth(AuthDefaults)
         setNotification({ message: 'Logout!', active: true, severity: 'info' });
@@ -58,7 +58,7 @@ function NavigationMenu() {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <HolidayVillageTwoToneIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -74,7 +74,7 @@ function NavigationMenu() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        WeatherTrip
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -114,7 +114,7 @@ function NavigationMenu() {
                                 to={"/logout"} onClick={() => logout()}> Logout </Button>}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <HolidayVillageTwoToneIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -131,7 +131,7 @@ function NavigationMenu() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Weather Trip
                     </Typography>
                     {/* Main navigation */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -139,9 +139,8 @@ function NavigationMenu() {
                         {userAuth.isAuthenticated && <NavLink style={{ my: 2, color: 'white', display: 'block', marginRight: '20px', textDecoration: 'none' }} to={"/profile"}>Profile</NavLink>}
                         {!userAuth.isAuthenticated && <NavLink style={{ my: 2, color: 'white', display: 'block', marginRight: '20px', textDecoration: 'none' }} to={"/sign-in"}>Login</NavLink>}
                         {!userAuth.isAuthenticated && <NavLink style={{ my: 2, color: 'white', display: 'block', marginRight: '20px', textDecoration: 'none' }} to={"/sign-up"} >Register</NavLink>}
-                        {userAuth.isAuthenticated && <Button variant="text"
-                            to={"/logout"} onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block', marginRight: '20px', textDecoration: 'none' }}> Logout </Button>}
-
+                        {userAuth.isAuthenticated && <Button style={{ my: 2, color: 'white', display: 'block', marginRight: '20px', textDecoration: 'none' }} variant="text"
+                            to={"/logout"} onClick={() => logout()} > Logout </Button>}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
