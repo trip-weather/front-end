@@ -1,12 +1,7 @@
 import axios from "axios";
-import { removeAuthToken } from "./AuthServicce";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-
+import {API_URL, API_URL_FULL} from "../shared/constants";
 
 export const loginUser = (data) => {
-    console.log(data.get('remember'));
-
     return axios({
         method: 'post',
         headers: {
@@ -14,7 +9,7 @@ export const loginUser = (data) => {
             "Content-Type": 'application/json',
         },
 
-        url: 'http://localhost:8080/api/authenticate',
+        url: `${API_URL_FULL}/authenticate`,
         data: {
             username: data.get('email'),
             password: data.get('password'),

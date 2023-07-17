@@ -21,7 +21,7 @@ export default function HotelCard({ hotel }) {
   const price = priceBreakdown.grossPrice.value.toFixed(2);
   const currency = priceBreakdown.grossPrice.currency;
 
-  console.log(hotel);
+  // console.log(hotel);
   return (
     <Card sx={{
       maxWidth: 345,

@@ -1,0 +1,28 @@
+.filters-container {
+    display: grid;
+    grid-template-columns: auto 18rem auto auto auto;
+    align-items: center;
+    /*grid-column-gap: 2rem;*/
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+}
+
+@media (max-width: 767px) {
+    .filters-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, auto);
+        grid-row-gap: .8rem;
+        padding: 1.5rem 2rem;
+    }
+
+    .filter.filter-location {
+        width: 100%;
+    }
+
+    .filter.filter-period {
+        display: flex;
+        gap: .8rem;
+    }
+
+
+}

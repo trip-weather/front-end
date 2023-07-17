@@ -1,0 +1,13 @@
+.found-hotels-container {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-items: center;
+    grid-column-gap: 1.5rem;
+    grid-row-gap: 2.4rem;
+}
+
+@media (max-width: 767px) {
+    .found-hotels-container {
+        grid-template-columns: 1fr;
+    }
+}
