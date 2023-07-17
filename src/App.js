@@ -38,7 +38,7 @@ function App() {
             </Route>
             <Route element={<PrivateRoutes />} exact>
               <Route path='/profile' element={<Profile />}></Route>
-              <Route path='/sugestion' element={<SearchPage />}></Route>
+              <Route path='/search' element={<SearchPage />}></Route>
             </Route>
           </Route>
         </Routes>

@@ -6,10 +6,10 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
-import { debounce } from '@mui/material/utils';
+import {debounce} from '@mui/material/utils';
+import {useContext, useEffect, useMemo, useRef, useState} from "react";
+import SearchContext from "../contexts/search.context";
 
-// This key was created specifically for the demo in mui.com.
-// You need to create a new one for your application.
 const GOOGLE_MAPS_API_KEY = 'AIzaSyDddh0R77aAmMXBSKMXyMjdeoEJpFJtBBE';
 
 function loadScript(src, position, id) {
@@ -24,13 +24,17 @@ function loadScript(src, position, id) {
     position.appendChild(script);
 }
 
-const autocompleteService = { current: null };
+const autocompleteService = {current: null};
 
-export default function GoogleLocationFilter({ handleCityChange }) {
-    const [value, setValue] = React.useState(null);
-    const [inputValue, setInputValue] = React.useState('');
-    const [options, setOptions] = React.useState([]);
-    const loaded = React.useRef(false);
+export default function GoogleLocationFilter() {
+
+    // TODO refactoring
+    const { data, setData } = useContext(SearchContext);
+
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = useState('');
+    const [options, setOptions] = useState([]);
+    const loaded = useRef(false);
 
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
@@ -44,7 +48,7 @@ export default function GoogleLocationFilter({ handleCityChange }) {
         loaded.current = true;
     }
 
-    const fetch = React.useMemo(
+    const fetch = useMemo(
         () =>
             debounce((request, callback) => {
                 autocompleteService.current.getPlacePredictions(request, callback);
@@ -52,7 +56,7 @@ export default function GoogleLocationFilter({ handleCityChange }) {
         [],
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
         let active = true;
 
         if (!autocompleteService.current && window.google) {
@@ -64,16 +68,16 @@ export default function GoogleLocationFilter({ handleCityChange }) {
         }
 
         if (inputValue === '') {
-            setOptions(value ? [value] : []);
+            setOptions(data.city ? [data.city] : []);
             return undefined;
         }
 
-        fetch({ input: inputValue }, (results) => {
+        fetch({input: inputValue}, (results) => {
             if (active) {
                 let newOptions = [];
 
-                if (value) {
-                    newOptions = [value];
+                if (data.city) {
+                    newOptions = [data.city];
                 }
 
                 if (results) {
@@ -87,12 +91,12 @@ export default function GoogleLocationFilter({ handleCityChange }) {
         return () => {
             active = false;
         };
-    }, [value, inputValue, fetch]);
+    }, [data.city, inputValue, fetch]);
 
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{ width: 300 }}
+            sx={{'min-width': 300}}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -101,18 +105,18 @@ export default function GoogleLocationFilter({ handleCityChange }) {
             autoComplete
             includeInputInList
             filterSelectedOptions
-            value={value}
+            value={data.city}
             noOptionsText="No locations"
             onChange={(event, newValue) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
-                handleCityChange(newValue.description);
+                setData({ ...data, city: newValue?.description ?? null });
             }}
             onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
             }}
             renderInput={(params) => (
-                <TextField {...params} label="Add a location" fullWidth />
+                <TextField {...params} label="Add a location" fullWidth/>
             )}
             renderOption={(props, option) => {
                 const matches =
@@ -126,15 +130,15 @@ export default function GoogleLocationFilter({ handleCityChange }) {
                 return (
                     <li {...props}>
                         <Grid container alignItems="center">
-                            <Grid item sx={{ display: 'flex', width: 44 }}>
-                                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                            <Grid item sx={{display: 'flex', width: 44}}>
+                                <LocationOnIcon sx={{color: 'text.secondary'}}/>
                             </Grid>
-                            <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                            <Grid item sx={{width: 'calc(100% - 44px)', wordWrap: 'break-word'}}>
                                 {parts.map((part, index) => (
                                     <Box
                                         key={index}
                                         component="span"
-                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                                        sx={{fontWeight: part.highlight ? 'bold' : 'regular'}}
                                     >
                                         {part.text}
                                     </Box>

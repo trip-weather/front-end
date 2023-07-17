@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { Box, Button, List, ListItem, ListItemText, Typography, Grid, Select, MenuItem } from '@mui/material';
 import Container from "@mui/material/Container";
 import HotelCard from "./HotelCard";
+import SearchContext from "../contexts/search.context";
 
-export default function SuggestTownsSection() {
+export default function SuggestTownsSection({ handleSubmit }) {
 
 
     const [selectedTown, setSelectedTown] = useState('');
+    const { data, setData } = useContext(SearchContext);
 
     const handleTownClick = (town) => {
         setSelectedTown(town);
+        setData({ ...data, city: town + '' });
+        handleSubmit(data);
+        console.log(data);
+
         // Logic for handling the selected town
     };
 
@@ -22,7 +28,7 @@ export default function SuggestTownsSection() {
     ];
 
     return (
-        <Box sx={{ backgroundColor: '#fff', padding: '40px 0' }}>
+        <Box sx={{ backgroundColor: '#f5f5f5', padding: '40px 0' }}>
             <Container maxWidth="lg">
                 <Typography variant="h5" component="h2" align="center" gutterBottom>
                     Most popular cities around you for tourism
@@ -33,7 +39,7 @@ export default function SuggestTownsSection() {
                         } key={index}>
                             <Button
                                 onClick={() => handleTownClick(town.name)}
-                                variant={selectedTown === town.name ? 'contained' : 'outlined'}
+                                variant={data.city?.includes(town.name) ?? false ? 'contained' : 'outlined'}
                                 sx={{ borderRadius: '5px', width: '100%', marginBottom: '10px' }}
                             >
                                 {town.name}

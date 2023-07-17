@@ -1,13 +1,16 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MuiInput from '@mui/material/Input';
-import {Button} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import GoogleLocationFilter from "../components/GoogleLocationFilter";
+import SearchIcon from '@mui/icons-material/Search';
+import '../css/search-bar-section.css'
+import SearchContext from "../contexts/search.context";
 
 
 const Input = styled(MuiInput)`
@@ -39,18 +42,12 @@ const marks = [
 ];
 
 function SearchBarSection({ handleSubmit }) {
+    const { data, setData } = useContext(SearchContext);
 
-
-    const [,setCity] = useState('');
-
-    const [data, setData] = useState({city: null, minTemp: null, maxTemp: null, period: null})
+    // const [data, setData] = useState({ city: null, minTemp: null, maxTemp: null, period: null })
     const [period, setPeriod] = useState(0);
     const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
-
-    const handleCityChange = (value) => {
-        setCity(value);
-        setData({...data, city: value });
-    };
+    const [isOpenDialog, setIsOpenDialog] = useState(false);
 
     const handlePeriod = (event) => {
         setPeriod(event.target.value);
@@ -71,14 +68,12 @@ function SearchBarSection({ handleSubmit }) {
 
     return (
         <>
-            <Grid  container sx={{px: 2, py: 3}}
-                   justifyContent="center"
-                   alignItems="center">
-                <Grid item xs={4}>
-                    <GoogleLocationFilter handleCityChange={handleCityChange}></GoogleLocationFilter>
-                </Grid>
-                <Grid item xs={4}>
-                    <Box sx={{width: '100%'}}>
+            <div className={'filters-container'}>
+                <div className={'filter filter-location'}>
+                    <GoogleLocationFilter></GoogleLocationFilter>
+                </div>
+                <div className={'filter'}>
+                    <Box sx={{ flexDirection: 'column' }}>
                         <Typography id="track-inverted-range-slider" gutterBottom>
                             Inverted track range
                         </Typography>
@@ -95,34 +90,61 @@ function SearchBarSection({ handleSubmit }) {
                             max={35}
                         />
                     </Box>
-                </Grid>
-                <Grid item justifyContent="center" xs={2}>
-                    <Box>
-                        <Grid>
-                            <Typography id="input-slider" gutterBottom>
-                                Period
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Input
-                                value={period}
-                                size="small"
-                                onChange={handlePeriod}
-                                inputProps={{
-                                    step: 1,
-                                    min: 0,
-                                    max: 50,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                        </Grid>
-                    </Box>
-                </Grid>
-                <Grid item xs={2}>
-                    <Button variant="contained" onClick={() => handleSubmit(data)}>Search</Button>
-                </Grid>
-            </Grid>
+                </div>
+                <div className={'filter filter-period'}>
+                    <Typography id="input-slider" gutterBottom>
+                        Days
+                    </Typography>
+                    <Input
+                        value={period}
+                        size="small"
+                        type={'number'}
+                        onChange={handlePeriod}
+                        inputProps={{
+                            step: 1,
+                            min: 0,
+                            max: 50,
+                            type: 'number',
+                            'aria-labelledby': 'input-slider',
+                        }}
+                    />
+                </div>
+                <div className={'filter'}>
+                    <Button fullWidth
+                            variant="outlined"
+                            onClick={() => setIsOpenDialog(true)}> Add filters </Button>
+                </div>
+                <div className={'filter'}>
+                    <Button fullWidth
+                            variant="contained" sx={{ px: '40px' }}
+                            endIcon={<SearchIcon/>} onClick={() => handleSubmit(data)}>Search</Button>
+                </div>
+            </div>
+
+            <Dialog
+                fullScreen={false}
+                open={isOpenDialog}
+                onClose={() => setIsOpenDialog(false)}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogTitle id="responsive-dialog-title">
+                    {"Additional filters"}
+                </DialogTitle>
+                <DialogContent>
+                    {/*<DialogContentText>*/}
+                    {/*    Let Google help apps determine location. This means sending anonymous*/}
+                    {/*    location data to Google, even when no apps are running.*/}
+                    {/*</DialogContentText>*/}
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={() => setIsOpenDialog(false)}>
+                        Close
+                    </Button>
+                    <Button onClick={() => {}} autoFocus> {/* TODO additional func should be created */}
+                        Apply
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }
