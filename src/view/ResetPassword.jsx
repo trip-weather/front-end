@@ -35,7 +35,7 @@ export default function ResetPassword() {
     })
       .then((response) => {
         console.log(response.data);
-        setNotification({ message: 'Succesfull reset password! Sign in!', active: false, severity: 'success' });
+        setNotification({ message: 'Successful reset password! Sign in!', active: false, severity: 'success' });
         navigate('/sign-in')
       })
       .catch((error) => {

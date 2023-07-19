@@ -77,7 +77,7 @@ export default function HotelCard({ hotel }) {
         <LocationOnRoundedIcon sx={{ color: red[500] }}/>
         {wishlistName}
         </Typography>
-        <Typography variant='body4' color="text.secondary"><b> Крайна цена : </b>{price} {currency}</Typography>
+        <Typography variant='body4' color="text.secondary"><b> Price per night : </b>{price} {currency}</Typography>
       </CardContent>
       <CardActions>
         <Button variant="outlined" size="small" href="#contained-buttons">

@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { checkIsUserAuthenticated, getUserId, getUserRole, getUserName } from "../services/AuthServicce";
+import { checkIsUserAuthenticated, getUserUuid, getUserRole, getUserName } from "../services/AuthServicce";
 
 export const AuthDefaults = {
     isAuthenticated: checkIsUserAuthenticated(),
     user: {
-        // id: getUserId(),
+        id: getUserUuid(),
         role: getUserRole()
         // username: getUserName()
     },

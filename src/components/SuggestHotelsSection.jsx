@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import HotelCard from "./HotelCard";
+import HotelCard from "../layouts/HotelCard";
 import axios from 'axios';
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";

@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import { Box, Button, List, ListItem, ListItemText, Typography, Grid, Select, MenuItem } from '@mui/material';
 import Container from "@mui/material/Container";
-import HotelCard from "./HotelCard";
+import HotelCard from "../layouts/HotelCard";
 import SearchContext from "../contexts/search.context";
 
 export default function SuggestTownsSection({ handleSubmit }) {

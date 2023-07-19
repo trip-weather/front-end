@@ -21,13 +21,13 @@ export const checkIsUserAuthenticated = () => {
     return currentTimeInSeconds < decoded.exp;
 };
 
-// export const getUserId = () => {
-//     const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
-//     if (token === null) return "";
+export const getUserUuid = () => {
+    const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+    if (token === null) return "";
 
-//     const decoded = jwt_decode(token);
-//     return decoded.id;
-// };
+    const decoded = jwt_decode(token);
+    return decoded.uuid;
+};
 
 export const getUserRole = () => {
     const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
