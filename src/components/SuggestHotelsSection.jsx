@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import HotelCard from "../layouts/HotelCard";
+import HotelCard from "./HotelCard";
 import axios from 'axios';
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import {API_URL, API_URL_FULL} from "../shared/constants";
+import { API_URL_FULL} from "../shared/constants";
 
 export default function SuggestHotelsSection() {
 

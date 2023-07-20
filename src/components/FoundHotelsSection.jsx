@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {Grid, Pagination} from "@mui/material";
-import HotelCard from "../layouts/HotelCard";
+import HotelCard from "./HotelCard";
 import Box from "@mui/material/Box";
 
 import '../css/found-hotels-section.css'

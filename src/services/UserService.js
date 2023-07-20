@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL, API_URL_FULL} from "../shared/constants";
+import { API_URL_FULL} from "../shared/constants";
 
 export const loginUser = (data) => {
     return axios({

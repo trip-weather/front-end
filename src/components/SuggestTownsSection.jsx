@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
-import { Box, Button, List, ListItem, ListItemText, Typography, Grid, Select, MenuItem } from '@mui/material';
+import {Box, Button, Grid, Typography} from '@mui/material';
 import Container from "@mui/material/Container";
-import HotelCard from "../layouts/HotelCard";
 import SearchContext from "../contexts/search.context";
 
 export default function SuggestTownsSection({ handleSubmit }) {
@@ -49,23 +48,5 @@ export default function SuggestTownsSection({ handleSubmit }) {
                 </Grid>
             </Container>
         </Box>
-
-
-        // <Box sx={{ m: 20, minWidth: 120, height: '150px', border: '1px solid', position: 'relative', overflow: 'hidden' }}>
-        //     <Grid container spacing={2}>
-        //         {towns.map((town, index) => (
-        //             <Grid item xs={6} sm={4} lg={2
-        //             } key={index}>
-        //                 <Button
-        //                     onClick={() => handleTownClick(town.name)}
-        //                     variant={selectedTown === town.name ? 'contained' : 'outlined'}
-        //                     sx={{ borderRadius: '5px', width: '100%', marginBottom: '10px' }}
-        //                 >
-        //                     {town.name}
-        //                 </Button>
-        //             </Grid>
-        //         ))}
-        //     </Grid>
-        // </Box>
     );
 }

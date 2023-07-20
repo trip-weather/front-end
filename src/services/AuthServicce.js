@@ -1,5 +1,6 @@
 import jwt_decode from "jwt-decode";
-import { JWT_LOCAL_STORAGE_KEY } from "../shared/constants";
+import {API_URL_FULL, JWT_LOCAL_STORAGE_KEY} from "../shared/constants";
+import axios from "axios";
 
 
 export const storeAuthToken = (token) => {
@@ -44,6 +45,21 @@ export const getUserName = () => {
 
     const decoded = jwt_decode(token);
     return decoded.sub;
+};
+
+export const getLikedHotels = async () => {
+    const response = await axios({
+        method: 'get',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+            Authorization: 'Bearer ' + getAuthToken()
+        },
+
+        url: `${API_URL_FULL}/user/favouriteHotels`,
+    });
+
+    return response.data;
 };
 
 

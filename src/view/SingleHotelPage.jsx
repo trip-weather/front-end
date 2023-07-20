@@ -1,104 +1,122 @@
-import React, {useEffect} from 'react';
-// import {makeStyles} from '@material-ui/core/styles';
-// import { createTheme } from '@material-ui/core/styles'
-import {Typography, Button, Grid, Paper, Card, CardMedia, CardContent} from '@material-ui/core';
-import {useParams} from "react-router-dom";
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, CircularProgress, Typography} from '@mui/material';
+
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import {getSingleHotel} from "../services/HotelService";
+import {useLocation, useParams} from "react-router-dom";
+import '../css/single-hotel-page.css'
+import {Autoplay, Pagination} from "swiper/modules";
+import {Swiper, SwiperSlide} from "swiper/react";
+import AuthContext from "../contexts/auth.context";
 
+const SinglePoster = ({}) => {
 
-// const useStyles = createTheme((theme) => ({
-//     root: {
-//         margin: 'auto',
-//         maxWidth: 600,
-//         padding: theme.spacing(2),
-//     },
-//     image: {
-//         height: 300,
-//         objectFit: 'cover',
-//     },
-// }));
+    const {id} = useParams();
+    const {search} = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const checkinDate = queryParams.get('checkIn');
+    const checkoutDate = queryParams.get('checkOut');
 
-export default  function SingleHotelPage() {
-    // const classes = useStyles();
-    const classes = {};
+    const [isLoading, setIsLoading] = useState(true);
+    const [hotelData, setHotelData] = useState();
+    const [isLiked, setIsLiked] = useState(false);
 
-    const { id } = useParams();
-
-    const hotel = {
-        name: 'Hotel Example',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-        photos: [
-            '/path/to/photo1.jpg',
-            '/path/to/photo2.jpg',
-            '/path/to/photo3.jpg',
-            '/path/to/photo4.jpg',
-        ],
-        website: 'https://www.example.com',
-        contactNumber: '+1234567890',
-        address: '123 Hotel Street, City, Country',
-    };
+    const { userAuth } = useContext(AuthContext);
 
     useEffect(() => {
-        getSingleHotel(id)
-            .then(response => { console.log(response); })
-            .catch((error) => { console.error(error) });
-    }, [])
+        getSingleHotel(id, checkinDate, checkoutDate)
+            .then(response => {
+                setHotelData(response.data);
+                setIsLoading(false);
+                const liked = userAuth.isAuthenticated && userAuth.user.liked.includes(response.data.hotelId);
+                setIsLiked(liked);
+                console.log(userAuth.user.liked);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                console.error(error);
+            });
+    }, []);
+
+    const toggleLikedHotel = () => {
+        // TODO
+
+        setIsLiked((oldValue) => !oldValue);
+    }
 
     return (
+        <>
+            { isLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                    <CircularProgress/>
+                </div>
+            }
+            { !isLoading &&
+                <div className='single-hotel-view-content-wrapper'>
+                    <div className="single-hotel-view-content-container">
+                        <div className='single-hotel-view-header'>
+                            <div>
+                                <Typography className='single-hotel-view-period'> { `${hotelData.arrivalDate} - ${hotelData.departureDate}` } </Typography>
+                                <h2 className='hotel-view-name'> { hotelData.name } </h2>
+                            </div>
 
-        <Paper className={classes.root}>
-            <Typography variant="h5" gutterBottom>
-                {hotel.name}
-            </Typography>
-            <Typography variant="body1">{hotel.description}</Typography>
+                            {/* TODO in order to check if it's liked user should be logged in */}
+                            <Button variant="outlined" onClick={toggleLikedHotel}
+                                    endIcon={ isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}>
+                                <span> {isLiked ? 'Добавена в любими' : 'Добави в любими'} </span>
+                            </Button>
+                        </div>
+                        <div className='single-hotel-view-content'>
+                            <div className="single-hotel-pictures-container">
+                                <div className="single-hotel-main-picture-swiper">
+                                    <Swiper
+                                        modules={[Autoplay, Pagination]}
+                                        style={{height: '100%'}}
+                                        effect="cards"
+                                        // speed={2500}
+                                        pagination={true}
+                                        loop={false}
+                                        autoplay={{delay: 500000, disableOnInteraction: false}}
+                                        onSlideChange={() => console.log('slide change')}
+                                        onSwiper={(swiper) => console.log(swiper)}
+                                        breakpoints={{
+                                            768: {
+                                                slidesPerView: 1,
+                                                spaceBetween: 50,
+                                            },
+                                        }}
+                                    >
+                                        {hotelData.photos.map((photo, index) => (
+                                            <SwiperSlide style={{height: '100%'}} id={index}>
+                                                <img src={photo.urlMax}
+                                                     style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+                                </div>
 
-            <Grid container spacing={2} justify="center">
-                <Grid item xs={12}>
-                    <Typography variant="h6">Photo Gallery</Typography>
-                </Grid>
-                {hotel.photos.map((photo, index) => (
-                    <Grid item xs={6} sm={4} md={3} key={index}>
-                        <Card>
-                            <CardMedia className={classes.image} image={photo} title={`Photo ${index + 1}`}/>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-
-            <Grid container spacing={2} justify="center">
-                <Grid item xs={12}>
-                    <Typography variant="h6">Additional Information</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="body1">
-                        <strong>Website:</strong> <a href={hotel.website}>{hotel.website}</a>
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="body1">
-                        <strong>Contact Number:</strong> {hotel.contactNumber}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="body1">
-                        <strong>Address:</strong> {hotel.address}
-                    </Typography>
-                </Grid>
-            </Grid>
-
-            <Grid container spacing={2} justify="center">
-                <Grid item xs={6}>
-                    <Button variant="contained" color="primary" fullWidth>
-                        Book Now
-                    </Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button variant="outlined" color="primary" fullWidth>
-                        Contact
-                    </Button>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
+                                <div className="single-hotel-secondary-pictures-container">
+                                    {
+                                        hotelData.photos.filter((_, index) => (index >= 1 && index < 5))
+                                            .map((photo, index) => (
+                                                    <div className="single-hotel-secondary-picture" >
+                                                        <img key={index} style={{width: '100%', height: '100%', objectFit: 'cover'}} src={photo.urlMax} />
+                                                    </div>
+                                                ))
+                                    }
+                                </div>
+                            </div>
+                            <div className="single-hotel-description-container">
+                                <p className="single-hotel-description">
+                                    { hotelData.description }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </>
+    );
 };
+export default SinglePoster;

@@ -9,6 +9,9 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import {API_URL_FULL, JWT_LOCAL_STORAGE_KEY} from "../shared/constants";
 import {getUserUuid} from "../services/AuthServicce";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
 // const theme = createMuiTheme();
 
@@ -65,11 +68,19 @@ const useStyles = makeStyles((theme) => ({
 const ProfilePage = () => {
     const classes = useStyles();
 
-    const [tab, setTab] = React.useState('favourite');
+    const [tab, setTab] = React.useState('info');
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const handleChange = (event, newValue) => {
+    const handleTabChange = (event, newValue) => {
         setTab(newValue);
+    };
+
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setUserData({
+            ...userData,
+            [name]: value,
+        });
     };
 
     const userUuid = getUserUuid();
@@ -118,11 +129,15 @@ const ProfilePage = () => {
         ],
     };
 
+    function handleChangePassword() {
+
+    }
+
     return (
         <>
-            { isLoading &&
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <CircularProgress />
+            {isLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                    <CircularProgress/>
                 </div>
             }
             {
@@ -137,27 +152,112 @@ const ProfilePage = () => {
                     <div>
                         <TabContext value={tab}>
                             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                <TabList onChange={handleTabChange} aria-label="lab API tabs example">
                                     <Tab label="Personal information" value="info"/>
+                                    <Tab label="Change Password" value="password"/>
                                     <Tab label="Favourite Hotels" value="favourite"/>
-                                    <Tab label="Reservations    " value="reserved"/>
+                                    <Tab label="Reservations" value="reserved"/>
                                 </TabList>
                             </Box>
                             <TabPanel value="favourite">Item One</TabPanel>
+                            <TabPanel value="password">
+                                <form onSubmit={handleChangePassword}>
+                                    <Grid container spacing={3} justifyContent="center">
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="Old password"
+                                                variant="outlined"
+                                                name="password"
+                                                type="password"
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="New password"
+                                                variant="outlined"
+                                                name="password"
+                                                type="password"
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.submitButton}
+                                            >
+                                                Change Password
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </form>
+
+                            </TabPanel>
                             <TabPanel value="reserved">Item Two</TabPanel>
                             <TabPanel value="info">
-                                <Typography variant="h6" className={classes.info}>
-                                    Email: {user.email}
-                                </Typography>
+                                <form>
+                                    <Grid container spacing={3} justifyContent="center">
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="Username"
+                                                variant="outlined"
+                                                name="username"
+                                                value={userData.username}
+                                                fullWidth
+                                                disabled={true}
+                                                readOnly
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="Email"
+                                                variant="outlined"
+                                                name="email"
+                                                value={userData.email}
+                                                disabled={true}
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="First Name"
+                                                variant="outlined"
+                                                name="firstName"
+                                                value={userData.firstName}
+                                                onChange={handleChange}
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <TextField
+                                                label="Last Name"
+                                                variant="outlined"
+                                                name="lastName"
+                                                value={userData.lastName}
+                                                onChange={handleChange}
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.submitButton}
+                                            >
+                                                Save Changes
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </form>
                             </TabPanel>
                         </TabContext>
                     </div>
-
                 </Paper>
             }
-
         </>
-
     )
 };
 

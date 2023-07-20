@@ -14,11 +14,10 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import NotificationContext from '../contexts/notification.context';
-import {API_URL, API_URL_FULL} from "../shared/constants";
+import {API_URL_FULL} from "../shared/constants";
 
 
 const defaultTheme = createTheme();
-
 
 export default function SignUp() {
     const navigate = useNavigate();

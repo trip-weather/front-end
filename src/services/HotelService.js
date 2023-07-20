@@ -1,7 +1,7 @@
 import axios from "axios";
 import {API_URL_FULL} from "../shared/constants";
 
-export const getSingleHotel = (id) => {
+export const getSingleHotel = (id, checkIn, checkOut) => {
     return axios({
         method: 'get',
         headers: {
@@ -9,6 +9,6 @@ export const getSingleHotel = (id) => {
             "Content-Type": 'application/json',
         },
 
-        url: `${API_URL_FULL}/hotel/${id}`,
+        url: `${API_URL_FULL}/hotel/${id}?checkIn=${checkIn}&checkOut=${checkOut}`,
     });
 };

@@ -2,19 +2,13 @@ import './App.css';
 import SignIn from './view/SignIn';
 import SignUp from './view/SignUp';
 import {useState} from 'react';
-import {AuthDefaults} from './contexts/auth.context';
-import AuthContext from './contexts/auth.context';
+import AuthContext, {AuthDefaults} from './contexts/auth.context';
 
 import RootLayout from './layouts/RootLayout';
 import Profile from './view/ProfilePage';
 import PublicRoutes from './routes/PublicRoutes';
 
-import {
-    BrowserRouter,
-    Route,
-    Routes,
-}
-    from "react-router-dom";
+import {BrowserRouter, Route, Routes,} from "react-router-dom";
 import ForgottenPassword from './view/ForgottenPassword';
 import ResetPassword from './view/ResetPassword';
 import PrivateRoutes from './routes/PrivateRoutes';
