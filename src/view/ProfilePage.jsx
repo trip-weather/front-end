@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -6,12 +6,12 @@ import {Avatar, Paper, Typography,} from '@material-ui/core';
 import {CircularProgress, Tab} from "@mui/material";
 import {TabContext} from "@mui/lab";
 import Box from "@mui/material/Box";
-import axios from "axios";
-import {API_URL_FULL, JWT_LOCAL_STORAGE_KEY} from "../shared/constants";
 import {getUserUuid} from "../services/AuthServicce";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import {changePassword, getProfile, updateUser} from "../services/UserService";
+import NotificationContext from "../contexts/notification.context";
 
 // const theme = createMuiTheme();
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '2rem auto',
         maxWidth: 600,
         padding: theme.spacing(4),
-        backgroundColor: '#F4F4F4',
+        // backgroundColor: '#F4F4F4',
         borderRadius: theme.spacing(2),
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
     },
@@ -68,14 +68,23 @@ const useStyles = makeStyles((theme) => ({
 const ProfilePage = () => {
     const classes = useStyles();
 
+    const {notification, setNotification} = useContext(NotificationContext);
+
     const [tab, setTab] = React.useState('info');
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+
+    const [passwordData, setPasswordData] = useState({
+        oldPassword: '',
+        newPassword: ''
+    });
+
+
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
     };
 
-    const handleChange = (event) => {
+    const handleDataChange = (event) => {
         const {name, value} = event.target;
         setUserData({
             ...userData,
@@ -83,16 +92,20 @@ const ProfilePage = () => {
         });
     };
 
+    const handlePasswordDataChange = (event) => {
+        const {name, value} = event.target;
+        setPasswordData({
+            ...passwordData,
+            [name]: value,
+        });
+    };
+
+
     const userUuid = getUserUuid();
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`${API_URL_FULL}/user/${userUuid}/profile`, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem(JWT_LOCAL_STORAGE_KEY),
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            }
-        })
+
+        getProfile()
             .then(response => {
                 console.log(response.data);
                 setUserData(response.data);
@@ -104,33 +117,37 @@ const ProfilePage = () => {
             });
     }, [userUuid]);
 
-    const user = {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        location: 'New York, USA',
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac lectus risus.',
-        avatar: '/path/to/avatar.jpg',
-        favoriteHotels: [
-            {
-                id: 1,
-                name: 'Hotel A',
-                photo: '/path/to/hotelA.jpg',
-            },
-            {
-                id: 2,
-                name: 'Hotel B',
-                photo: '/path/to/hotelB.jpg',
-            },
-            {
-                id: 3,
-                name: 'Hotel C',
-                photo: '/path/to/hotelC.jpg',
-            },
-        ],
-    };
 
-    function handleChangePassword() {
+    function handleChangePassword(event) {
+        event.preventDefault();
 
+        changePassword(passwordData)
+            .then(response => {
+                console.log("Success")
+                setNotification({active: true, message: "Successful changed password", severity: 'success'});
+
+                setPasswordData({
+                    oldPassword: '',
+                    newPassword: ''
+                });
+            })
+            .catch(error => {
+                console.log(error.message)
+                setNotification({active: true, message: "Invalid current password", severity: 'error'})
+            });
+    }
+
+    function handleUpdateUser(event) {
+        event.preventDefault();
+
+        updateUser(userData)
+            .then(response => {
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching user profile:', error);
+                setIsLoading(false);
+            });
     }
 
     return (
@@ -144,7 +161,7 @@ const ProfilePage = () => {
                 !isLoading &&
                 <Paper sx={{mt: 2}} className={classes.root}>
                     <div className={classes.avatarContainer}>
-                        <Avatar className={classes.avatar} src={user.avatar} alt="User Avatar"/>
+                        <Avatar className={classes.avatar} src={'/path/to/avatar.jpg'} alt="User Avatar"/>
                     </div>
                     <Typography variant="h4" className={classes.title}>
                         {userData.firstName + ' ' + userData.lastName}
@@ -167,8 +184,10 @@ const ProfilePage = () => {
                                             <TextField
                                                 label="Old password"
                                                 variant="outlined"
-                                                name="password"
+                                                name="oldPassword"
                                                 type="password"
+                                                value={passwordData.oldPassword}
+                                                onChange={handlePasswordDataChange}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -176,8 +195,10 @@ const ProfilePage = () => {
                                             <TextField
                                                 label="New password"
                                                 variant="outlined"
-                                                name="password"
+                                                name="newPassword"
                                                 type="password"
+                                                value={passwordData.newPassword}
+                                                onChange={handlePasswordDataChange}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -197,7 +218,7 @@ const ProfilePage = () => {
                             </TabPanel>
                             <TabPanel value="reserved">Item Two</TabPanel>
                             <TabPanel value="info">
-                                <form>
+                                <form onSubmit={handleUpdateUser}>
                                     <Grid container spacing={3} justifyContent="center">
                                         <Grid item xs={12} md={6}>
                                             <TextField
@@ -226,7 +247,7 @@ const ProfilePage = () => {
                                                 variant="outlined"
                                                 name="firstName"
                                                 value={userData.firstName}
-                                                onChange={handleChange}
+                                                onChange={handleDataChange}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -236,7 +257,7 @@ const ProfilePage = () => {
                                                 variant="outlined"
                                                 name="lastName"
                                                 value={userData.lastName}
-                                                onChange={handleChange}
+                                                onChange={handleDataChange}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -260,5 +281,6 @@ const ProfilePage = () => {
         </>
     )
 };
+
 
 export default ProfilePage;

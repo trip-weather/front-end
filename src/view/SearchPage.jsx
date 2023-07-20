@@ -1,11 +1,10 @@
 import SuggestHotelsSection from "../components/SuggestHotelsSection";
 import SearchBarSection from "../components/SearchBarSection";
 import SuggestTownsSection from "../components/SuggestTownsSection";
-import axios from "axios";
 import {useState} from "react";
 import FoundHotelsSection from "../components/FoundHotelsSection";
-import {API_URL_FULL} from "../shared/constants";
 import SearchContext, {DefaultSearch} from "../contexts/search.context";
+import {getSuggestedHotels, searchHotels} from "../services/HotelService";
 
 
 function SearchPage() {
@@ -16,7 +15,7 @@ function SearchPage() {
         console.log(data);
 
         if (data.city == null && data.minTemp == null && data.maxTemp == null && data.period == null) {
-            axios.get(`${API_URL_FULL}/suggested-hotels`)
+            getSuggestedHotels()
                 .then((response) => {
                     console.log(response);
                     setFoundHotels(response.data);
@@ -25,7 +24,7 @@ function SearchPage() {
                 .catch(error => console.error(error));
         } else {
             console.log(data)
-            axios.get(`${API_URL_FULL}/search`, {params: data})
+            searchHotels(data)
                 .then((response) => {
                     setFoundHotels(response.data[0].results);
                 })

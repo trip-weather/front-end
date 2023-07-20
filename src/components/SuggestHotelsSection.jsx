@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import HotelCard from "./HotelCard";
-import axios from 'axios';
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { Autoplay, Navigation  } from 'swiper/modules';
-import { Swiper, SwiperSlide} from 'swiper/react';
+import {Autoplay, Navigation} from 'swiper/modules';
+import {Swiper, SwiperSlide} from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { API_URL_FULL} from "../shared/constants";
+import {getSuggestedHotels} from "../services/HotelService";
 
 export default function SuggestHotelsSection() {
 
@@ -19,7 +18,7 @@ export default function SuggestHotelsSection() {
     useEffect(() => {
         const fetchHotels = async () => {
             try {
-                const response = await axios.get(`${API_URL_FULL}/suggested-hotels`); // TODO move to separate service (there should be no single fetches)
+                const response = await getSuggestedHotels();
                 setHotels(response.data);
             } catch (error) {
                 console.log('Error fetching hotels:', error);
@@ -31,7 +30,7 @@ export default function SuggestHotelsSection() {
 
     return (
         <>
-            <Box sx={{ backgroundColor: '#f5f5f5', padding: '40px 0' }}>
+            <Box sx={{backgroundColor: '#f5f5f5', padding: '40px 0'}}>
                 <Container maxWidth="lg">
                     <Typography variant="h4" component="h2" align="center" gutterBottom>
                         Suggested based on your location and time frame
@@ -41,7 +40,7 @@ export default function SuggestHotelsSection() {
                         effect="cards"
                         speed={1000}
                         navigation={true}
-                        autoplay={{ delay: 1200, disableOnInteraction: false }}
+                        autoplay={{delay: 1200, disableOnInteraction: false}}
                         loop
                         onSlideChange={() => console.log('slide change')}
                         onSwiper={(swiper) => console.log(swiper)}
@@ -62,7 +61,7 @@ export default function SuggestHotelsSection() {
                     >
                         {hotels.map((hotel) => (
                             <SwiperSlide>
-                                <HotelCard key={hotel.id} hotel={hotel} sx={{ maxWidth: 345 }} />
+                                <HotelCard key={hotel.id} hotel={hotel} sx={{maxWidth: 345}}/>
                             </SwiperSlide>
                         ))}
                     </Swiper>
