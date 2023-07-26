@@ -55,7 +55,7 @@ function NavigationMenu() {
     }
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: '#F5C599' }}>
+        <AppBar position="static" sx={{ backgroundColor: '#D0B8A8' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <HolidayVillageTwoToneIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

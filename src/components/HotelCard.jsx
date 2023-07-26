@@ -28,10 +28,13 @@ export default function HotelCard({hotel}) {
         propertyClass,
         reviewScoreWord
     } = hotel;
+
+    console.log(hotel)
+    console.log(hotel.priceBreakdown);
     const price = priceBreakdown.grossPrice.value.toFixed(2);
     const currency = priceBreakdown.grossPrice.currency;
 
-    // console.log(hotel);
+
     return (
         <Card sx={{
             maxWidth: 345,
@@ -71,9 +74,9 @@ export default function HotelCard({hotel}) {
                     value={propertyClass}
                     readOnly
                     precision={0.5}
-                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit"/>}
+                    emptyIcon={<StarIcon style={{ opacity: 0.55}} fontSize="inherit"/>}
                 />
-                <Box sx={{ ml: 2 }}>{reviewScoreWord}</Box>
+                <Box sx={{ ml: 2}}>{reviewScoreWord}</Box>
             </Box>
 
             <CardMedia

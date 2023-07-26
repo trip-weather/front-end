@@ -87,3 +87,32 @@
     line-height: 1.5rem;
     letter-spacing: 0.051px;
 }
+
+.property-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Styling for each property */
+.property {
+    max-width: 30%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #F8EDE3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Styling for the property text */
+/*.property-text {*/
+/*    background-color: c;*/
+/*}*/
+
+/* Animation when hovering over a property */
+.property:hover {
+    transform: scale(1.05);
+}

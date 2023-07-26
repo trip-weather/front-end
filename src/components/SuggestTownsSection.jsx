@@ -36,7 +36,11 @@ export default function SuggestTownsSection({ handleSubmit }) {
                     {towns.map((town, index) => (
                         <Grid item xs={6} sm={4} lg={2
                         } key={index}>
-                            <Button
+                            <Button style={{
+                                borderColor: selectedTown === town.name ? '#85586F' : 'black',
+                                color: selectedTown === town.name ? 'white' : '#85586F',
+                                backgroundColor: selectedTown === town.name ? '#85586F' : 'white'
+                            }}
                                 onClick={() => handleTownClick(town.name)}
                                 variant={data.city?.includes(town.name) ?? false ? 'contained' : 'outlined'}
                                 sx={{ borderRadius: '5px', width: '100%', marginBottom: '10px' }}

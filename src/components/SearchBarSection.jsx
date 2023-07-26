@@ -109,12 +109,14 @@ function SearchBarSection({ handleSubmit }) {
                     />
                 </div>
                 <div className={'filter'}>
-                    <Button fullWidth
+                    <Button style={{borderColor: '#85586F', color: '#85586F'}}
+                            fullWidth
                             variant="outlined"
                             onClick={() => setIsOpenDialog(true)}> Add filters </Button>
                 </div>
                 <div className={'filter'}>
-                    <Button fullWidth
+                    <Button style={{backgroundColor: '#85586F'}}
+                            fullWidth
                             variant="contained" sx={{ px: '40px' }}
                             endIcon={<SearchIcon/>} onClick={() => handleSubmit(data)}>Search</Button>
                 </div>

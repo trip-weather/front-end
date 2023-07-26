@@ -168,8 +168,10 @@ const ProfilePage = () => {
                     </Typography>
                     <div>
                         <TabContext value={tab}>
-                            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                                <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+                            <Box sx={{borderBottom: 1, borderColor: '#85586F', color: '#85586F'}}>
+                                <TabList
+                                    onChange={handleTabChange} aria-label="lab API tabs example"
+                                    style={{color: '#85586F'}}>
                                     <Tab label="Personal information" value="info"/>
                                     <Tab label="Change Password" value="password"/>
                                     <Tab label="Favourite Hotels" value="favourite"/>
@@ -262,11 +264,11 @@ const ProfilePage = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Button
-                                                type="submit"
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.submitButton}
+                                            <Button style={{backgroundColor: '#85586F'}}
+                                                    type="submit"
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.submitButton}
                                             >
                                                 Save Changes
                                             </Button>

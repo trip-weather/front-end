@@ -9,28 +9,92 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import {getSuggestedHotels} from "../services/HotelService";
+import {getSuggestedHotels, getSuggestedHotelsByLocation} from "../services/HotelService";
+import {getCityFromLatLng, getUserLocation} from "../services/UserService";
+import {CircularProgress} from "@mui/material";
 
 export default function SuggestHotelsSection() {
 
     const [hotels, setHotels] = useState([]);
+    const [city, setCity] = useState(null);
+
+
+    // useEffect(() => {
+    //     const fetchUserLocation = async () => {
+    //         try {
+    //             const location = await getUserLocation();
+    //             console.log(location);
+    //             if (location !== null) {
+    //                 const city = await getCityFromLatLng(location.latitude, location.longitude);
+    //                 setCity(city);
+    //                 console.log(city);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching user location:', error);
+    //         }
+    //     };
+    //
+    //     fetchUserLocation();
+    // }, []);
+    //
+    // useEffect(() => {
+    //     const fetchHotels = async () => {
+    //         try {
+    //             console.log(city)
+    //             if (city !== null) {
+    //                 console.log("inside if")
+    //                 const response =  await getSuggestedHotelsByLocation(city);
+    //                 console.log(response);
+    //                 // setHotels(response.data);
+    //             } else {
+    //                 const response = await getSuggestedHotels();
+    //                 setHotels(response.data);
+    //             }
+    //
+    //         } catch (error) {
+    //             console.log('Error fetching hotels:', error);
+    //         }
+    //     };
+    //
+    //     fetchHotels();
+    // }, [city]);
+
 
     useEffect(() => {
-        const fetchHotels = async () => {
+        const fetchHotelsBasedOnLocation = async () => {
             try {
-                const response = await getSuggestedHotels();
-                setHotels(response.data);
+                const location = await getUserLocation();
+                console.log(location);
+                if (location !== null) {
+                    const city = await getCityFromLatLng(location.latitude, location.longitude);
+                    setCity(city);
+                    console.log(city);
+
+                    if (city !== null) {
+                        console.log("inside if");
+                        const response = await getSuggestedHotelsByLocation(city);
+                        console.log("hotels",response);
+                        console.log("hotels",response.data[0].results);
+                        setHotels(response.data[0].results);
+                        console.log(hotels)
+                    }
+                } else {
+                    const suggestedHotels = (await getSuggestedHotels()).data;
+                    console.log(suggestedHotels);
+                    setHotels(suggestedHotels);
+                }
             } catch (error) {
-                console.log('Error fetching hotels:', error);
+                console.error('Error fetching user location:', error);
             }
         };
 
-        fetchHotels();
+        fetchHotelsBasedOnLocation();
     }, []);
+
 
     return (
         <>
-            <Box sx={{backgroundColor: '#f5f5f5', padding: '40px 0'}}>
+           <Box sx={{backgroundColor: '#f5f5f5', padding: '40px 0'}}>
                 <Container maxWidth="lg">
                     <Typography variant="h4" component="h2" align="center" gutterBottom>
                         Suggested based on your location and time frame
@@ -60,8 +124,8 @@ export default function SuggestHotelsSection() {
                         }}
                     >
                         {hotels.map((hotel) => (
-                            <SwiperSlide>
-                                <HotelCard key={hotel.id} hotel={hotel} sx={{maxWidth: 345}}/>
+                            <SwiperSlide key={hotel.id}>
+                                <HotelCard hotel={hotel} sx={{maxWidth: 345}}/>
                             </SwiperSlide>
                         ))}
                     </Swiper>

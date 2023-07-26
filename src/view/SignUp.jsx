@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
 import NotificationContext from '../contexts/notification.context';
-import {registerUser, signUp} from "../services/UserService";
+import {registerUser} from "../services/UserService";
 
 
 const defaultTheme = createTheme();
