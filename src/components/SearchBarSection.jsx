@@ -3,11 +3,10 @@ import {useContext, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MuiInput from '@mui/material/Input';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
-import GoogleLocationFilter from "../components/GoogleLocationFilter";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material';
+import GoogleLocationFilter from "./GoogleLocationFilter";
 import SearchIcon from '@mui/icons-material/Search';
 import '../css/search-bar-section.css'
 import SearchContext from "../contexts/search.context";
@@ -75,7 +74,7 @@ function SearchBarSection({ handleSubmit }) {
                 <div className={'filter'}>
                     <Box sx={{ flexDirection: 'column' }}>
                         <Typography id="track-inverted-range-slider" gutterBottom>
-                            Inverted track range
+                            Temperature
                         </Typography>
                         <Slider
                             aria-label="Restricted values"
@@ -110,12 +109,14 @@ function SearchBarSection({ handleSubmit }) {
                     />
                 </div>
                 <div className={'filter'}>
-                    <Button fullWidth
+                    <Button style={{borderColor: '#85586F', color: '#85586F'}}
+                            fullWidth
                             variant="outlined"
                             onClick={() => setIsOpenDialog(true)}> Add filters </Button>
                 </div>
                 <div className={'filter'}>
-                    <Button fullWidth
+                    <Button style={{backgroundColor: '#85586F'}}
+                            fullWidth
                             variant="contained" sx={{ px: '40px' }}
                             endIcon={<SearchIcon/>} onClick={() => handleSubmit(data)}>Search</Button>
                 </div>

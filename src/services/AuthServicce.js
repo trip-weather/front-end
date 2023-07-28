@@ -1,5 +1,6 @@
 import jwt_decode from "jwt-decode";
-import { JWT_LOCAL_STORAGE_KEY } from "../shared/constants";
+import {API_URL_FULL, JWT_LOCAL_STORAGE_KEY} from "../shared/constants";
+import axios from "axios";
 
 
 export const storeAuthToken = (token) => {
@@ -21,13 +22,13 @@ export const checkIsUserAuthenticated = () => {
     return currentTimeInSeconds < decoded.exp;
 };
 
-// export const getUserId = () => {
-//     const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
-//     if (token === null) return "";
+export const getUserUuid = () => {
+    const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+    if (token === null) return "";
 
-//     const decoded = jwt_decode(token);
-//     return decoded.id;
-// };
+    const decoded = jwt_decode(token);
+    return decoded.uuid;
+};
 
 export const getUserRole = () => {
     const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
@@ -44,6 +45,26 @@ export const getUserName = () => {
 
     const decoded = jwt_decode(token);
     return decoded.sub;
+};
+
+export const getLikedHotels = async () => {
+
+    if (!checkIsUserAuthenticated()){
+        return [];
+    }
+
+    const response = await axios({
+        method: 'get',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+            Authorization: 'Bearer ' + getAuthToken()
+        },
+
+        url: `${API_URL_FULL}/user/favouriteHotels`,
+    });
+
+    return response.data;
 };
 
 

@@ -9,8 +9,8 @@ import parse from 'autosuggest-highlight/parse';
 import {debounce} from '@mui/material/utils';
 import {useContext, useEffect, useMemo, useRef, useState} from "react";
 import SearchContext from "../contexts/search.context";
+import {GOOGLE_MAPS_API_KEY} from "../shared/constants";
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyDddh0R77aAmMXBSKMXyMjdeoEJpFJtBBE';
 
 function loadScript(src, position, id) {
     if (!position) {

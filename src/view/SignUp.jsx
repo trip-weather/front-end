@@ -11,14 +11,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import NotificationContext from '../contexts/notification.context';
-import {API_URL, API_URL_FULL} from "../shared/constants";
+import {registerUser} from "../services/UserService";
 
 
 const defaultTheme = createTheme();
-
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -144,23 +142,7 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        axios({
-            method: 'post',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                "Content-Type": 'application/json'
-            },
-
-            url: `${API_URL_FULL}/register`,
-            data: {
-                username: data.get('username'),
-                email: data.get('email'),
-                password: data.get('password'),
-                repeatedPassword: data.get('repeatedPassword'),
-                firstName: data.get('firstName'),
-                lastName: data.get('lastName')
-            }
-        })
+        registerUser(data)
             .then((response) => {
                 console.log(response.data);
                 setNotification({message: 'Successful registration!', active: true, severity: 'success'});
@@ -284,6 +266,7 @@ export default function SignUp() {
                             </Grid>
                         </Grid>
                         <Button
+                            style={{backgroundColor: '#85586F'}}
                             type="submit"
                             fullWidth
                             variant="contained"
