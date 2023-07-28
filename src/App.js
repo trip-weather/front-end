@@ -16,6 +16,7 @@ import SearchPage from './view/SearchPage';
 import SingleHotelPage from "./view/SingleHotelPage";
 import ActivateProfile from "./components/ActivateProfile";
 import PaymentOutcome from "./view/PaymentOutcome";
+import PaymentOutcomeFlight from "./view/PaymentOutcomeFlight";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                             <Route path='/profile' element={<Profile/>}></Route>
                             <Route path='/search' element={<SearchPage/>}></Route>
                             <Route path='/payment-outcome' element={<PaymentOutcome/>}></Route>
+                            <Route path='/payment-outcome-flight' element={<PaymentOutcomeFlight/>}></Route>
                         </Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>

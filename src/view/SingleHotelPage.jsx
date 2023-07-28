@@ -15,7 +15,6 @@ import Rating from "@mui/material/Rating";
 import {makeStyles} from "@material-ui/core/styles";
 import Box from "@mui/material/Box";
 import {likeHotel, unlikeHotel} from "../services/UserService";
-import {checkIsUserAuthenticated} from "../services/AuthServicce";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -206,7 +205,8 @@ const SingleHotelPage = ({}) => {
                                     </Typography>
                                     <Button onClick={handleMakeReservation}
                                             variant="contained" style={{backgroundColor: '#85586F'}}>Make a
-                                        reservation</Button>
+                                        reservation
+                                    </Button>
                                 </Box>
                             </div>
                             <div className="single-hotel-description-container">

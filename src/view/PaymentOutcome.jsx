@@ -49,8 +49,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 const PaymentOutcome = () => {
-    // TODO retrieve the order id from the url
-    // TODO send a request to the backend to acquire the data
     // TODO based on the order status display different cases
     // TODO get user location and only if he allows show the flight tickets
 
@@ -98,7 +96,10 @@ const PaymentOutcome = () => {
                     adults: 2
                 };
 
+                console.log(city)
+
                 const response = await getFlightTicketsByDirections(params);
+                console.log(response.data);
                 setFlights(response.data.data);
                 setShowFlightTicket(true);
 
