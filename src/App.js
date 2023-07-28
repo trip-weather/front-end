@@ -15,6 +15,7 @@ import PrivateRoutes from './routes/PrivateRoutes';
 import SearchPage from './view/SearchPage';
 import SingleHotelPage from "./view/SingleHotelPage";
 import ActivateProfile from "./components/ActivateProfile";
+import PaymentOutcome from "./view/PaymentOutcome";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                         <Route element={<PrivateRoutes/>} exact>
                             <Route path='/profile' element={<Profile/>}></Route>
                             <Route path='/search' element={<SearchPage/>}></Route>
+                            <Route path='/payment-outcome' element={<PaymentOutcome/>}></Route>
                         </Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>

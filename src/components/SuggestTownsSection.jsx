@@ -14,16 +14,21 @@ export default function SuggestTownsSection({ handleSubmit }) {
         setData({ ...data, city: town + '' });
         handleSubmit(data);
         console.log(data);
-
-        // Logic for handling the selected town
     };
 
     const towns = [
-        { name: 'Sofia', x: 50, y: 50 },
-        { name: 'Plovdiv', x: 150, y: 50 },
-        { name: 'Varna', x: 250, y: 50 },
-        { name: 'Burgas', x: 350, y: 50 }
-        // Add more towns as needed
+        { name: 'Los Angeles', x: 50, y: 50 },
+        { name: 'Florence', x: 150, y: 50 },
+        { name: 'Nice', x: 250, y: 50 },
+        { name: 'Rio de Janeiro', x: 350, y: 50 },
+        { name: 'Malaga', x: 350, y: 50 },
+        { name: 'Sydney', x: 350, y: 50 },
+        { name: 'Tel Aviv', x: 350, y: 50 },
+        { name: 'Hong Kong', x: 350, y: 50 },
+        { name: 'Lisbon', x: 350, y: 50 },
+        { name: 'Barcelona', x: 350, y: 50 },
+        { name: 'Palermo', x: 350, y: 50 },
+        { name: 'Marseille', x: 350, y: 50 },
     ];
 
     return (

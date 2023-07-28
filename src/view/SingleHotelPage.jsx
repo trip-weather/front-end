@@ -100,7 +100,7 @@ const SingleHotelPage = ({}) => {
     }
 
     function handleMakeReservation() {
-        makeReservation(id, hotelData.totalPrice)
+        makeReservation(id, hotelData.totalPrice, checkinDate, checkoutDate)
             .then(response => {
                 const sessionUrl = response.data;
                 console.log('Payment Session URL:', sessionUrl);

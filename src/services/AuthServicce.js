@@ -48,6 +48,11 @@ export const getUserName = () => {
 };
 
 export const getLikedHotels = async () => {
+
+    if (!checkIsUserAuthenticated()){
+        return [];
+    }
+
     const response = await axios({
         method: 'get',
         headers: {

@@ -12,61 +12,11 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import {changePassword, getProfile, updateUser} from "../services/UserService";
 import NotificationContext from "../contexts/notification.context";
-
-// const theme = createMuiTheme();
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: '2rem auto',
-        maxWidth: 600,
-        padding: theme.spacing(4),
-        // backgroundColor: '#F4F4F4',
-        borderRadius: theme.spacing(2),
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-    },
-    avatarContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        marginBottom: theme.spacing(4),
-    },
-    avatar: {
-        width: theme.spacing(16),
-        height: theme.spacing(16),
-        border: '4px solid #FFF',
-    },
-    title: {
-        marginBottom: theme.spacing(2),
-        textAlign: 'center',
-        color: '#333',
-        fontWeight: 'bold',
-        letterSpacing: 1,
-    },
-    info: {
-        marginBottom: theme.spacing(1),
-        textAlign: 'center',
-        color: '#555',
-        letterSpacing: 0.5,
-    },
-    bio: {
-        marginTop: theme.spacing(4),
-        textAlign: 'center',
-        color: '#777',
-        fontStyle: 'italic',
-    },
-    favoriteHotelsContainer: {
-        marginTop: theme.spacing(4),
-    },
-    favoriteHotelCard: {
-        marginBottom: theme.spacing(2),
-    },
-    favoriteHotelMedia: {
-        height: 160,
-    },
-}));
+import '../css/profile-page.css'
+import FavoriteHotelCard from "../components/FavouriteHotelCard";
 
 
 const ProfilePage = () => {
-    const classes = useStyles();
 
     const {notification, setNotification} = useContext(NotificationContext);
 
@@ -159,11 +109,11 @@ const ProfilePage = () => {
             }
             {
                 !isLoading &&
-                <Paper sx={{mt: 2}} className={classes.root}>
-                    <div className={classes.avatarContainer}>
-                        <Avatar className={classes.avatar} src={'/path/to/avatar.jpg'} alt="User Avatar"/>
+                <Paper sx={{mt: 2}} className="root">
+                    <div className="avatarContainer">
+                        <Avatar className="avatar" src={'/path/to/avatar.jpg'} alt="User Avatar"/>
                     </div>
-                    <Typography variant="h4" className={classes.title}>
+                    <Typography variant="h4" className="title">
                         {userData.firstName + ' ' + userData.lastName}
                     </Typography>
                     <div>
@@ -178,7 +128,19 @@ const ProfilePage = () => {
                                     <Tab label="Reservations" value="reserved"/>
                                 </TabList>
                             </Box>
-                            <TabPanel value="favourite">Item One</TabPanel>
+                            <TabPanel value="favourite">
+                                <div>
+                                    {userData.favouriteHotels.map((hotel) => (
+                                        <FavoriteHotelCard
+                                            key={hotel.externalId}
+                                            id={hotel.externalId}
+                                            hotelName={hotel.name}
+                                            city={hotel.city}
+                                            imageUrl={hotel.photoMainUrl}
+                                        />
+                                    ))}
+                                </div>
+                            </TabPanel>
                             <TabPanel value="password">
                                 <form onSubmit={handleChangePassword}>
                                     <Grid container spacing={3} justifyContent="center">
@@ -206,10 +168,11 @@ const ProfilePage = () => {
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Button
+                                                style={{backgroundColor: '#85586F'}}
                                                 type="submit"
                                                 variant="contained"
                                                 color="primary"
-                                                className={classes.submitButton}
+                                                className="submitButton"
                                             >
                                                 Change Password
                                             </Button>
@@ -268,7 +231,7 @@ const ProfilePage = () => {
                                                     type="submit"
                                                     variant="contained"
                                                     color="primary"
-                                                    className={classes.submitButton}
+                                                    className="submitButton"
                                             >
                                                 Save Changes
                                             </Button>

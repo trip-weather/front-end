@@ -266,6 +266,7 @@ export default function SignUp() {
                             </Grid>
                         </Grid>
                         <Button
+                            style={{backgroundColor: '#85586F'}}
                             type="submit"
                             fullWidth
                             variant="contained"

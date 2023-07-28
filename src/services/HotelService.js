@@ -24,8 +24,7 @@ export const searchHotels = (data) => {
     return axios.get(`${API_URL_FULL}/search`, {params: data})
 }
 
-export const makeReservation = (externalId, amount) => {
-    console.log(`${API_URL_FULL}/create-verification-session?id=${externalId}&amount=${amount}`);
+export const makeReservation = (externalId, amount, checkInDate, checkOutDate) => {
     return axios({
         method: 'post',
         headers: {
@@ -33,6 +32,6 @@ export const makeReservation = (externalId, amount) => {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         },
-        url: `${API_URL_FULL}/create-verification-session?id=${externalId}&amount=${amount}`,
+        url: `${API_URL_FULL}/create-verification-session?id=${externalId}&amount=${amount}&check_in=${checkInDate}&check_out=${checkOutDate}`,
     })
 }

@@ -42,8 +42,6 @@ function SearchPage() {
         }
     }
 
-
-
     return (
         <>
             <SearchContext.Provider value={{data: searchData, setData: setSearchData}}>
