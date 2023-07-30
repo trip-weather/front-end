@@ -35,3 +35,15 @@ export const makeReservation = (externalId, amount, checkInDate, checkOutDate) =
         url: `${API_URL_FULL}/hotel/create-verification-session?id=${externalId}&amount=${amount}&check_in=${checkInDate}&check_out=${checkOutDate}`,
     })
 }
+
+export const getReservedHotelByExternalId = (externalId) => {
+    return axios({
+        method: 'get',
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        },
+        url: `${API_URL_FULL}/user/reservation/hotel/${externalId}`
+    })
+}

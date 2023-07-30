@@ -48,8 +48,7 @@ export const getUserName = () => {
 };
 
 export const getLikedHotels = async () => {
-
-    if (!checkIsUserAuthenticated()){
+    if (!checkIsUserAuthenticated()) {
         return [];
     }
 
@@ -67,22 +66,41 @@ export const getLikedHotels = async () => {
     return response.data;
 };
 
+export const getUserReservations = async () => {
+    if(!checkIsUserAuthenticated()) return [];
 
+    try {
+        const response = await axios({
+            method: 'get',
+            headers: {
+                Authorization: 'Bearer ' + getAuthToken(),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            url: `${API_URL_FULL}/user/reservations/hotel`,
+        });
+
+        console.debug(response.data);
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+}
 
 export const getUpdateAuthState = () => {
-        // const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
-        // if( token === null) return AuthDefaults;
+    // const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+    // if( token === null) return AuthDefaults;
 
-        // const decoded = jwt_decode(token);
-        // const auth = { ...AuthDefaults, user: { ...AuthDefaults.user } };
+    // const decoded = jwt_decode(token);
+    // const auth = { ...AuthDefaults, user: { ...AuthDefaults.user } };
 
-        // console.log(decoded, auth);
-        // auth.user.username = decoded.username;
-        // auth.user.role = decoded.role;
-        // // auth.user.id = decoded.id;
-        // auth.isAuthenticated = true;
+    // console.log(decoded, auth);
+    // auth.user.username = decoded.username;
+    // auth.user.role = decoded.role;
+    // // auth.user.id = decoded.id;
+    // auth.isAuthenticated = true;
 
-        // console.log(auth);
-        // return auth;
+    // console.log(auth);
+    // return auth;
 };
 

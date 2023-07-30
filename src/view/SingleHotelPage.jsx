@@ -3,7 +3,7 @@ import {Button, CircularProgress, Divider, Typography} from '@mui/material';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {getSingleHotel, makeReservation} from "../services/HotelService";
+import {getReservedHotelByExternalId, getSingleHotel, makeReservation} from "../services/HotelService";
 import {useLocation, useParams} from "react-router-dom";
 import '../css/single-hotel-page.css'
 import {Autoplay, Pagination} from "swiper/modules";
@@ -54,27 +54,43 @@ const SingleHotelPage = ({}) => {
     const checkoutDate = queryParams.get('checkOut');
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isHotelReservedByUser, setIsHotelReservedByUser] = useState(false);
+    const [isHotelReservedByUserInPeriod, setIsHotelReservedByUserInPeriod] = useState(false);
     const [hotelData, setHotelData] = useState();
+
 
     const [isLiked, setIsLiked] = useState(false);
 
     const {userAuth} = useContext(AuthContext);
 
     useEffect(() => {
+        setIsHotelReservedByUser(userAuth.user.reserved.includes(Number.parseInt(id)));
+
         getSingleHotel(id, checkinDate, checkoutDate)
             .then(response => {
-                console.log(response.data);
                 setHotelData(response.data);
                 setIsLoading(false);
                 const liked = userAuth.isAuthenticated && userAuth.user.liked.includes(response.data.hotelId);
                 setIsLiked(liked);
-                console.log(userAuth.user.liked);
-                console.log(hotelData);
+
+
+                if (isHotelReservedByUser) {
+                    getReservedHotelByExternalId(id)
+                        .then((res) => {
+                            const checkInDate = res.data.checkInDate;
+                            const checkOutDate = res.data.checkOutDate;
+
+                            setIsHotelReservedByUserInPeriod(response.data.arrivalDate === checkInDate
+                                && response.data.departureDate === checkOutDate)
+                        })
+                        .catch()
+                }
             })
             .catch((error) => {
                 setIsLoading(false);
                 console.error(error);
             });
+
     }, []);
 
     const toggleLikedHotel = () => {
@@ -107,7 +123,6 @@ const SingleHotelPage = ({}) => {
             }).catch(error => {
             console.log('Error creating payment session:', error.response.data)
         })
-
     }
 
     return (

@@ -1,0 +1,81 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+.flight-ticker-card-wrapper {
+    width: min(95%, 45rem);
+    border: 1px solid firebrick;
+    border-radius: .6rem;
+    overflow: hidden;
+}
+
+.flight-ticket-card + .flight-ticket-card {
+    margin-top: .5rem;
+    /*border-top: 1px solid firebrick;*/
+}
+
+.flight-ticker-card-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.flight-ticker-card-info {
+    position: relative;
+    display: flex;
+    padding: 2rem;
+}
+
+.flight-ticker-card-info .date-info {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.flight-ticker-card-info .airport-info {
+    margin-left: 1.7rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+
+}
+
+.flight-ticker-card-info-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .8rem 2.5rem;
+}
+
+.flight-ticker-card-info-header span {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem
+}
+
+.flight-ticker-card-info:nth-child(1)::before {
+    content: "";
+    position: absolute;
+    left: 53px;
+    top: 35px;
+    width: 2px;
+    height: calc(100% + 10px);
+    mask: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAADwCAMAAAD8WVBVAAAAb1BMVEUAAAC/v8+/v9+/v9e/w9u/wtm/wty/xdrBxt2/xNi/xNvBxdu/w9m/w9vBxNu/w9q/w9zAxNzAxdy/wtm/wtrAw9zAxdvAxdy/xNnAxNvAxNrAxNvAxN3AxNrAxNzAxdzAw9vAw9zAxNvAxNzAxNtGKypvAAAAJHRSTlMAEBAgQFBQYG9wcH+AgI+QkJ+foKCvr6+wv8/Pz9/f3+/v7+9leMSZAAABiklEQVR4Ae3bW5LTMBBG4XakJIwxYRIuIITMhX//ayS8ApWJLp6uqTrfBk61rDe3DAAAAAAAAAAAAAC2Mu3nSy66KunjEqdnqr5O+kuag20tJv1Xii7ZP9a9bSUk3XQOtolXP/SE9WjjTSfd4TS+m3WXHGyosOpOa/DpSutk42RVyOPKJ1U52SBHVXoY+oEr/Aw2wlnVkg1wUINo/VbJZeQo+YycJJeRgxpN1mdWo8XnpLvPeif5nHVUs731WNTswXp8ULOLz92SvliPombfrIc6vPgwYcKECRMmTJgwYcKECRMmTJgwYcKECRMmTJgwYcKECRP2/3H9Vc2S9XinZp/7N248dm4Oahb9V24cl4waLB0bNz5nHfxX5xyWBR1GLtYvNm+ROYx8thHCL1UqwYaYVelogzyqylsbZZdVIds4u9L/gduE4tK9Crn/yUCjx/571ehY9ITvs20ivNdNKdhWDuVGNno9LdtamNM/1TfP9ZAvLp9S0VXJl/mwWRUAAAAAAAAAAAAAfgPrRYYX/D3mLQAAAABJRU5ErkJggg==) center/contain;
+    background-size: contain;
+    background: rgba(0, 0, 0, .2) repeat-y 50%;
+}
+
+.ornament {
+    box-sizing: content-box;
+    position: relative;
+    top: 4px;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 16px;
+    margin-right: 32px;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
