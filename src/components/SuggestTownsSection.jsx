@@ -21,10 +21,10 @@ export default function SuggestTownsSection({ handleSubmit }) {
         { name: 'Los Angeles', x: 50, y: 50 },
         { name: 'Florence', x: 150, y: 50 },
         { name: 'Nice', x: 250, y: 50 },
-        { name: 'Rio de Janeiro', x: 350, y: 50 },
-        { name: 'Malaga', x: 350, y: 50 },
         { name: 'Sydney', x: 350, y: 50 },
         { name: 'Tel Aviv', x: 350, y: 50 },
+        { name: 'San Diego', x: 350, y: 50 },
+        { name: 'Tamarindo', x: 350, y: 50 },
         { name: 'Hong Kong', x: 350, y: 50 },
         { name: 'Lisbon', x: 350, y: 50 },
         { name: 'Barcelona', x: 350, y: 50 },
@@ -36,7 +36,7 @@ export default function SuggestTownsSection({ handleSubmit }) {
         <Box sx={{ backgroundColor: '#f5f5f5', padding: '40px 0' }}>
             <Container maxWidth="lg">
                 <Typography variant="h5" component="h2" align="center" gutterBottom>
-                    Most popular cities around you for tourism
+                    Most popular cities for tourism
                 </Typography>
                 <Grid container spacing={2}>
                     {towns.map((town, index) => (

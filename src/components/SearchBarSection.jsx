@@ -87,6 +87,7 @@ function SearchBarSection({ handleSubmit }) {
                             marks={marks}
                             min={5}
                             max={35}
+                            sx={{ color: '#85586F' }}
                         />
                     </Box>
                 </div>

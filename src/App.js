@@ -17,6 +17,7 @@ import SingleHotelPage from "./view/SingleHotelPage";
 import ActivateProfile from "./components/ActivateProfile";
 import PaymentOutcome from "./view/PaymentOutcome";
 import PaymentOutcomeFlight from "./view/PaymentOutcomeFlight";
+import Home from "./view/home/Home";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                         <Route path='/search' element={<SearchPage/>}></Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>
+                        <Route path='' element={<Home/>}></Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

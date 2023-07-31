@@ -37,7 +37,7 @@ export default function SignIn() {
         const value = event.target.value;
         setEmail(value);
 
-        if (value.length < 5 || value.length > 20) {
+        if (value.length < 4 || value.length > 20) {
             setEmailError('Username must be between 4 and 20 characters.');
         } else {
             setEmailError('');
