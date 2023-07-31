@@ -1,60 +1,30 @@
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import {Typography} from "@material-ui/core";
-import {Button, Collapse, Step, StepLabel, Stepper} from "@mui/material";
-import {makeStyles} from "@material-ui/core/styles";
+import {Button, Collapse} from "@mui/material";
 import React, {useState} from "react";
-import {ExpandMore} from "@mui/icons-material";
 import {bookFlight} from "../services/FlightTicketService";
 import {format, parseISO} from "date-fns";
-
-const useStyles = makeStyles((theme) => ({
-    card: {
-        width: '100%',
-        // margin: theme.spacing(4),
-        // boxShadow: theme.shadows[5],
-        // borderRadius: theme.spacing(1),
-    },
-    cardContent: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    airlineName: {
-        fontWeight: 'bold',
-        fontSize: '1.2rem',
-    },
-    flightDetails: {
-        fontSize: '1rem',
-        marginBottom: theme.spacing(1),
-    },
-    price: {
-        fontWeight: 'bold',
-        fontSize: '1.5rem',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-    },
-    bookButton: {
-        marginTop: theme.spacing(2),
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        color: 'white',
-    },
-    image: {
-        width: '100%',
-        height: '200px',
-        objectFit: 'cover',
-        borderTopLeftRadius: theme.spacing(1),
-        borderTopRightRadius: theme.spacing(1),
-    },
-}));
+import '../css/flight-ticket-card.css'
+import airplane from '../resources/airplane-icon.png'
 
 const FlightTicketCard = ({flights}) => {
-        const classes = useStyles();
-
         const [expanded, setExpanded] = useState(false);
 
-        function handleBookFlight(amount, departingAt, arrivingAt, from, to) {
-            bookFlight(amount, departingAt, arrivingAt, from, to)
+        function handleBookFlight() {
+            const data = {
+                amount: flights.totalAmount,
+                outgoingFlight: {
+                    departingAt: flights.slices[0].segments[0]?.departingAt,
+                    arrivingAt: flights.slices[0].segments[0]?.arrivingAt
+                },
+                incomingFlight: {
+                    departingAt: flights.slices[1].segments[0]?.departingAt,
+                    arrivingAt: flights.slices[1].segments[0]?.arrivingAt
+                },
+                from: flights.slices[0].origin.name,
+                to: flights.slices[0].destination.name
+            }
+
+            bookFlight(data)
                 .then(response => {
                     const sessionUrl = response.data;
                     console.log('Payment Session URL:', sessionUrl);
@@ -86,68 +56,54 @@ const FlightTicketCard = ({flights}) => {
 
 
         return (
-            <div>
-                <Typography variant="body1" className={classes.price}>
-                    {`${flights.totalAmount} ${flights.currency}`}
-                </Typography>
-
+            <div className='flight-ticker-card-wrapper'>
+                <div className='flight-ticker-card-header'>
+                    <h2>
+                        {`${flights.totalAmount} ${flights.currency}`}
+                    </h2>
+                    <Button
+                        sx={{px: '2.5rem', fontSize: '1.1rem'}}
+                        onClick={() => handleBookFlight()}
+                        variant="contained" style={{backgroundColor: '#85586F'}}>Book
+                    </Button>
+                </div>
                 {flights.slices.map((flight, index) => {
-
                         return <>
-                            <Card key={index} className={classes.card}>
-                                <CardContent className={classes.cardContent}>
+                            <Card onClick={() => setExpanded(!expanded)} key={index} className='flight-ticket-card'>
+                                <div className='flight-ticker-card-info-header'>
+                                    <span>
+                                        <img src={airplane} alt='airplane icon'/>
+                                        <h3>{`${format(parseISO(flight.segments[0]?.departingAt), "HH:mm")} - ${format(parseISO(flight.segments[0]?.arrivingAt), "HH:mm")}`}</h3>
+                                    </span>
                                     <div>
-                                        <div>
-
-                                            <span>{`${format(parseISO(flight.segments[0]?.departingAt), "HH:mm")} - ${format(parseISO(flight.segments[0]?.arrivingAt), "HH:mm")}`}</span>
-                                            {/*<span>{format(parseISO(flight.segments[0]?.arrivingAt), "HH:mm")}</span>*/}
-                                            {/*<span> {flight.segments[0].departingAt} </span>*/}
-                                            {/*<span> {flight.segments[0].arrivingAt} </span>*/}
-                                        </div>
-                                        <span> {`${flight.origin.iataCode} - ${flight.destination.iataCode}`}</span>
-                                        <span> {formatTimeDuration(flight.duration)}</span>
+                                        <h2> {`${flight.origin.iataCode} - ${flight.destination.iataCode}`}</h2>
+                                        <p> {formatTimeDuration(flight.duration)}</p>
                                     </div>
-
-                                    <ExpandMore
-                                        expand={expanded}
-                                        onClick={() => setExpanded(!expanded)}
-                                    >
-                                    </ExpandMore>
-                                </CardContent>
+                                </div>
                                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                                    <CardContent>
-                                        <Stepper alternativeLabel activeStep={2} orientation="vertical">
-                                            <Step>
-                                                <StepLabel style={{display: 'flex'}}>
-                                                    <div style={{marginLeft: '2rem'}}>
-                                                        <div> {flight.segments[0]?.arrivingAt} </div>
-                                                        <div> Depart from {flight.origin.name} </div>
-                                                    </div>
-                                                </StepLabel>
-                                            </Step>
-                                            <Step>
-                                                <StepLabel>
-                                                    <div style={{marginLeft: '2rem'}}>
-                                                        {/*<div> {flight.segments[0]?.departingAt} </div>*/}
-                                                        {format(new Date(flight.segments[0]?.departingAt), "EEE, d MMM yyyy. HH:mm")}
-                                                        <div> Arrive at {flight.destination.name} </div>
-                                                    </div>
-                                                </StepLabel>
-                                            </Step>
-
-                                        </Stepper>
-                                    </CardContent>
+                                    <div className='flight-ticker-card-content-container'>
+                                        <div>
+                                            <div className='flight-ticker-card-info'>
+                                                <div className="ornament"></div>
+                                                <span className="date-info">
+                                                    {format(new Date(flight.segments[0]?.arrivingAt), "EEE, d MMM yyyy. HH:mm")}
+                                                </span>
+                                                <span className="airport-info"> Depart from {flight.origin.name} </span>
+                                            </div>
+                                            <div className='flight-ticker-card-info'>
+                                                <div className="ornament"></div>
+                                                <span className="date-info">
+                                                    {format(new Date(flight.segments[0]?.departingAt), "EEE, d MMM yyyy. HH:mm")}
+                                                </span>
+                                                <span className="airport-info"> Arrive at {flight.destination.name} </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Collapse>
                             </Card>
-                            <Button
-                                onClick={() => handleBookFlight(flights.totalAmount, flight.segments[0]?.departingAt, flight.segments[0]?.arrivingAt, flight.origin.name, flight.destination.name)}
-                                variant="contained" style={{backgroundColor: '#85586F'}}>Book
-                            </Button>
                         </>
-
                     }
                 )}
-
             </div>
         );
     }

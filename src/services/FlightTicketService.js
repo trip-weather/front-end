@@ -18,7 +18,7 @@ export const getFlightTicketsByDirections = (data) => {
     });
 };
 
-export const bookFlight = (amount, departingAt, arrivingAt, from, to) => {
+export const bookFlight = (data) => {
     return axios({
         method: 'post',
         headers: {
@@ -26,6 +26,7 @@ export const bookFlight = (amount, departingAt, arrivingAt, from, to) => {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         },
-        url: `${API_URL_FULL}/flight/create-verification-session?amount=${amount}&departing_at=${departingAt}&arriving_at=${arrivingAt}&from=${from}&to=${to}`,
+        data,
+        url: `${API_URL_FULL}/flight/create-verification-session`,
     })
 }

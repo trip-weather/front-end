@@ -11,9 +11,10 @@ export default function SuggestTownsSection({ handleSubmit }) {
 
     const handleTownClick = (town) => {
         setSelectedTown(town);
-        setData({ ...data, city: town + '' });
-        handleSubmit(data);
-        console.log(data);
+
+        const modified = { ...data, city: town + '' };
+        setData(modified);
+        handleSubmit(modified);
     };
 
     const towns = [

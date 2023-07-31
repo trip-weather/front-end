@@ -13,7 +13,7 @@ function SearchPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [searchData, setSearchData] = useState(DefaultSearch.data);
     function handleSubmit(data) {
-        console.log(data);
+        console.debug(data);
 
         setIsLoading(true);
         if (data.city == null && data.minTemp == null && data.maxTemp == null && data.period == null) {
@@ -29,7 +29,6 @@ function SearchPage() {
                     setIsLoading(false);
                 });
         } else {
-            console.log(data)
             searchHotels(data)
                 .then((response) => {
                     setFoundHotels(response.data[0].results);

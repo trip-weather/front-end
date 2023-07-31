@@ -3,8 +3,8 @@ import {
     checkIsUserAuthenticated,
     getUserUuid,
     getUserRole,
-    getUserName,
-    getLikedHotels
+    getLikedHotels,
+    getUserReservations
 } from "../services/AuthServicce";
 
 export const AuthDefaults = {
@@ -12,7 +12,8 @@ export const AuthDefaults = {
     user: {
         id: getUserUuid(),
         role: getUserRole(),
-        liked: await getLikedHotels()
+        liked: await getLikedHotels(),
+        reserved: await getUserReservations()
     },
 };
 

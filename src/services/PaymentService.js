@@ -4,7 +4,7 @@ import {getAuthToken} from "./AuthServicce";
 
 export const getPaymentInfo = (uuid) => {
 
-    return axios.get(`${API_URL_FULL}/order/${uuid}`, {
+    return axios.get(`${API_URL_FULL}/hotel-order/${uuid}`, {
         headers: {
             Authorization: 'Bearer ' + getAuthToken(),
             'Access-Control-Allow-Origin': '*',

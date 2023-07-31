@@ -3,9 +3,8 @@ import {Button, CircularProgress, Divider, Typography} from '@mui/material';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {getSingleHotel, makeReservation} from "../services/HotelService";
-import {useLocation, useParams} from "react-router-dom";
-import '../css/single-hotel-page.css'
+import {getReservedHotelByExternalId, getSingleHotel, makeReservation} from "../services/HotelService";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {Autoplay, Pagination} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import AuthContext from "../contexts/auth.context";
@@ -15,6 +14,8 @@ import Rating from "@mui/material/Rating";
 import {makeStyles} from "@material-ui/core/styles";
 import Box from "@mui/material/Box";
 import {likeHotel, unlikeHotel} from "../services/UserService";
+import '../css/single-hotel-page.css'
+import {checkIsUserAuthenticated} from "../services/AuthServicce";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -54,27 +55,43 @@ const SingleHotelPage = ({}) => {
     const checkoutDate = queryParams.get('checkOut');
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isHotelReservedByUser, setIsHotelReservedByUser] = useState(false);
+    const [isHotelReservedByUserInPeriod, setIsHotelReservedByUserInPeriod] = useState(false);
     const [hotelData, setHotelData] = useState();
+    const navigate = useNavigate();
+
 
     const [isLiked, setIsLiked] = useState(false);
 
     const {userAuth} = useContext(AuthContext);
 
     useEffect(() => {
+        setIsHotelReservedByUser(userAuth.user.reserved.includes(Number.parseInt(id)));
+
         getSingleHotel(id, checkinDate, checkoutDate)
             .then(response => {
-                console.log(response.data);
                 setHotelData(response.data);
                 setIsLoading(false);
                 const liked = userAuth.isAuthenticated && userAuth.user.liked.includes(response.data.hotelId);
                 setIsLiked(liked);
-                console.log(userAuth.user.liked);
-                console.log(hotelData);
+
+                if (userAuth.user.reserved.includes(Number.parseInt(id))) {
+                    getReservedHotelByExternalId(id)
+                        .then((res) => {
+                            const checkInDate = res.data.checkInDate;
+                            const checkOutDate = res.data.checkOutDate;
+
+                            setIsHotelReservedByUserInPeriod(response.data.arrivalDate === checkInDate
+                                && response.data.departureDate === checkOutDate);
+                        })
+                        .catch()
+                }
             })
             .catch((error) => {
                 setIsLoading(false);
                 console.error(error);
             });
+
     }, []);
 
     const toggleLikedHotel = () => {
@@ -99,6 +116,9 @@ const SingleHotelPage = ({}) => {
     }
 
     function handleMakeReservation() {
+        if (!checkIsUserAuthenticated()) {
+            navigate('/sign-in');
+        }
         makeReservation(id, hotelData.totalPrice, checkinDate, checkoutDate)
             .then(response => {
                 const sessionUrl = response.data;
@@ -107,7 +127,6 @@ const SingleHotelPage = ({}) => {
             }).catch(error => {
             console.log('Error creating payment session:', error.response.data)
         })
-
     }
 
     return (
@@ -129,85 +148,120 @@ const SingleHotelPage = ({}) => {
                                 </Typography>
                             </div>
 
-                            {/* TODO in order to check if it's liked user should be logged in */}
-                            <Button variant="outlined" style={{
-                                backgroundColor: '#DFD3C3',
-                                color: '#85586F',
-                                outline: 'none',
-                                border: 'none'
-                            }} onClick={toggleLikedHotel}
-                                    endIcon={isLiked ? <FavoriteIcon style={{color: '#85586F'}}/> :
-                                        <FavoriteBorderIcon/>}>
-                                <span> {isLiked ? 'Added to favourite' : 'Add to favourite'} </span>
-                            </Button>
+                            {
+                                userAuth.isAuthenticated &&
+                                <Button variant="outlined" style={{
+                                    backgroundColor: '#DFD3C3',
+                                    color: '#85586F',
+                                    outline: 'none',
+                                    border: 'none'
+                                }} onClick={toggleLikedHotel}
+                                        endIcon={isLiked ? <FavoriteIcon style={{color: '#85586F'}}/> :
+                                            <FavoriteBorderIcon/>}>
+                                    <span> {isLiked ? 'Added to favourite' : 'Add to favourite'} </span>
+                                </Button>
+                            }
+
                         </div>
                         <div className='single-hotel-view-content'>
                             <div className="single-hotel-pictures-container">
-                                <div className="single-hotel-main-picture-swiper">
-                                    <Swiper
-                                        modules={[Autoplay, Pagination]}
-                                        style={{height: '100%'}}
-                                        effect="cards"
-                                        speed={2500}
-                                        pagination={true}
-                                        loop={false}
-                                        autoplay={{delay: 500000, disableOnInteraction: false}}
-                                        onSlideChange={() => console.log('slide change')}
-                                        onSwiper={(swiper) => console.log(swiper)}
-                                        breakpoints={{
-                                            768: {
-                                                slidesPerView: 1,
-                                                spaceBetween: 50,
-                                            },
-                                        }}
-                                    >
-                                        {hotelData.photos.map((photo, index) => (
-                                            <SwiperSlide style={{height: '100%'}} id={index}>
-                                                <img src={photo.urlMax}
-                                                     style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
-                                            </SwiperSlide>
-                                        ))}
-                                    </Swiper>
+                                <div className='single-hotel-left-container'>
+                                    <div className="single-hotel-main-picture-swiper">
+                                        <Swiper
+                                            modules={[Autoplay, Pagination]}
+                                            style={{height: '100%'}}
+                                            effect="cards"
+                                            speed={2500}
+                                            pagination={true}
+                                            loop={false}
+                                            autoplay={{delay: 500000, disableOnInteraction: false}}
+                                            onSlideChange={() => console.log('slide change')}
+                                            onSwiper={(swiper) => console.log(swiper)}
+                                            breakpoints={{
+                                                768: {
+                                                    slidesPerView: 1,
+                                                    spaceBetween: 50,
+                                                },
+                                            }}
+                                        >
+                                            {hotelData.photos.map((photo, index) => (
+                                                <SwiperSlide style={{height: '100%'}} id={index}>
+                                                    <img src={photo.urlMax}
+                                                         style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+                                    </div>
+                                    <div className="single-hotel-secondary-pictures-container">
+                                        {
+                                            hotelData.photos.filter((_, index) => (index >= 1 && index < 5))
+                                                .map((photo, index) => (
+                                                    <div className="single-hotel-secondary-picture">
+                                                        <img key={index}
+                                                             style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                             src={photo.urlMax}/>
+                                                    </div>
+                                                ))
+                                        }
+                                    </div>
                                 </div>
-
-                                <div className="single-hotel-secondary-pictures-container">
+                                <div className='single-hotel-right-container'>
+                                    {!isHotelReservedByUserInPeriod &&
+                                        <Box className={classes.container}>
+                                            <Typography variant="h6">Reservation Dates</Typography>
+                                            <Typography>
+                                                {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
+                                            </Typography>
+                                            <Divider/>
+                                            <div className={classes.ratingContainer}>
+                                                <StarIcon className={classes.ratingIcon}/>
+                                                <Typography variant="body2">Rating:</Typography>
+                                                <Rating value={hotelData.rating} precision={0.5} readOnly/>
+                                            </div>
+                                            <Divider/>
+                                            <Typography variant="body1" className={classes.reviewText}>
+                                                Price for {hotelData.pricePerDay} night:
+                                            </Typography>
+                                            <Divider/>
+                                            <Typography variant="body1">Total Price
+                                                for {hotelData.nights} days:</Typography>
+                                            <Typography variant="h6" color="primary">
+                                                ${hotelData.totalPrice}
+                                            </Typography>
+                                            <Button onClick={handleMakeReservation}
+                                                    variant="contained" style={{backgroundColor: '#85586F'}}>Make a
+                                                reservation
+                                            </Button>
+                                        </Box>
+                                    }
                                     {
-                                        hotelData.photos.filter((_, index) => (index >= 1 && index < 5))
-                                            .map((photo, index) => (
-                                                <div className="single-hotel-secondary-picture">
-                                                    <img key={index}
-                                                         style={{width: '100%', height: '100%', objectFit: 'cover'}}
-                                                         src={photo.urlMax}/>
-                                                </div>
-                                            ))
+                                        isHotelReservedByUserInPeriod &&
+                                        <div>
+                                            <Typography variant='h6'>
+                                                {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
+                                            </Typography>
+                                            <p className='already-booked-text'> You have already booked the hotel </p>
+                                            <Button style={{
+                                                backgroundColor: '#DFD3C3',
+                                                color: '#85586F',
+                                                fontWeight: 600,
+                                                border: '1px solid #85586F'
+                                            }} variant='outlined' href={'/profile'}> More info </Button>
+                                        </div>
+                                    }
+                                    {
+                                        (!isHotelReservedByUserInPeriod && isHotelReservedByUser) &&
+                                        <div>
+                                            <span className='already-booked-text'> You have reservation for this hotel in different period </span>
+                                            <Button style={{
+                                                backgroundColor: '#DFD3C3',
+                                                color: '#85586F',
+                                                fontWeight: 600,
+                                                border: '1px solid #85586F'
+                                            }} variant='outlined' href={'/profile'}> More info </Button>
+                                        </div>
                                     }
                                 </div>
-                                <Box className={classes.container}>
-                                    <Typography variant="h6">Reservation Dates</Typography>
-                                    <Typography>
-                                        {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
-                                    </Typography>
-                                    <Divider/>
-                                    <div className={classes.ratingContainer}>
-                                        <StarIcon className={classes.ratingIcon}/>
-                                        <Typography variant="body2">Rating:</Typography>
-                                        <Rating value={hotelData.rating} precision={0.5} readOnly/>
-                                    </div>
-                                    <Divider/>
-                                    <Typography variant="body1" className={classes.reviewText}>
-                                        Price for {hotelData.pricePerDay} night:
-                                    </Typography>
-                                    <Divider/>
-                                    <Typography variant="body1">Total Price
-                                        for {hotelData.nights} days:</Typography>
-                                    <Typography variant="h6" color="primary">
-                                        ${hotelData.totalPrice}
-                                    </Typography>
-                                    <Button onClick={handleMakeReservation}
-                                            variant="contained" style={{backgroundColor: '#85586F'}}>Make a
-                                        reservation
-                                    </Button>
-                                </Box>
                             </div>
                             <div className="single-hotel-description-container">
                                 <p className="single-hotel-description"

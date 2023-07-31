@@ -54,23 +54,24 @@ function NavigationMenu() {
     }
 
     return (
-        <AppBar position="static" sx={{backgroundColor: '#D0B8A8'}}>
+        <AppBar position="static" style={{backgroundColor: '#D0B8A8'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <HolidayVillageTwoToneIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
+                    <HolidayVillageTwoToneIcon sx={{display: {xs: 'none', md: 'flex', color: '#fff !important'}, mr: 1}}/>
                     <Typography
                         variant="h6"
                         noWrap
                         component="a"
                         href="/"
-                        sx={{
-                            mr: 2,
-                            display: {xs: 'none', md: 'flex'},
+                        style={{
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: '#fff',
                             textDecoration: 'none',
+                        }}
+                        sx={{
+                            display: {xs: 'none', md: 'flex'},
                         }}
                     >
                         WeatherTrip

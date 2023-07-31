@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import {Avatar, Paper, Typography,} from '@material-ui/core';
@@ -10,10 +9,17 @@ import {getUserUuid} from "../services/AuthServicce";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import {changePassword, getProfile, updateUser} from "../services/UserService";
+import {
+    changePassword,
+    getProfile,
+    getUserReservedFlights,
+    getUserReservedHotels,
+    updateUser
+} from "../services/UserService";
 import NotificationContext from "../contexts/notification.context";
 import '../css/profile-page.css'
 import FavoriteHotelCard from "../components/FavouriteHotelCard";
+import ReservedFlightTicketCard from "../components/ReservedFlightTicketCard";
 
 
 const ProfilePage = () => {
@@ -21,7 +27,12 @@ const ProfilePage = () => {
     const {notification, setNotification} = useContext(NotificationContext);
 
     const [tab, setTab] = React.useState('info');
+    const [reservationsTab, setReservationsTab] = React.useState('hotels');
     const [userData, setUserData] = useState({});
+    const [userReservedPastHotels, setUserReservedPastHotels] = useState([]);
+    const [userReservedFutureHotels, setUserReservedFutureHotels] = useState([]);
+    const [userReservedPastFlights, setUserReservedPastFlights] = useState([]);
+    const [userReservedFutureFlights, setUserReservedFutureFlights] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [passwordData, setPasswordData] = useState({
@@ -32,6 +43,10 @@ const ProfilePage = () => {
 
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
+    };
+
+    const handleReservationsTabChange = (event, newValue) => {
+        setReservationsTab(newValue);
     };
 
     const handleDataChange = (event) => {
@@ -65,6 +80,38 @@ const ProfilePage = () => {
                 console.error('Error fetching user profile:', error);
                 setIsLoading(false);
             });
+
+        getUserReservedHotels('past')
+            .then(response => {
+                console.log(response.data)
+                setUserReservedPastHotels(response.data);
+            }).catch(error => {
+            console.log(error)
+        })
+
+        getUserReservedHotels('future')
+            .then(response => {
+                console.log(response.data)
+                setUserReservedFutureHotels(response.data);
+            }).catch(error => {
+            console.log(error)
+        })
+
+        getUserReservedFlights('past')
+            .then(response => {
+                setUserReservedPastFlights(response.data);
+                console.log(response.data)
+            }).catch(error => {
+            console.log(error)
+        })
+
+        getUserReservedFlights('future')
+            .then(response => {
+                setUserReservedFutureFlights(response.data);
+                console.log(response.data)
+            }).catch(error => {
+            console.log(error)
+        })
     }, [userUuid]);
 
 
@@ -125,7 +172,6 @@ const ProfilePage = () => {
                                     <Tab label="Personal information" value="info"/>
                                     <Tab label="Change Password" value="password"/>
                                     <Tab label="Favourite Hotels" value="favourite"/>
-                                    <Tab label="Reservations" value="reserved"/>
                                 </TabList>
                             </Box>
                             <TabPanel value="favourite">
@@ -179,9 +225,7 @@ const ProfilePage = () => {
                                         </Grid>
                                     </Grid>
                                 </form>
-
                             </TabPanel>
-                            <TabPanel value="reserved">Item Two</TabPanel>
                             <TabPanel value="info">
                                 <form onSubmit={handleUpdateUser}>
                                     <Grid container spacing={3} justifyContent="center">
@@ -242,7 +286,75 @@ const ProfilePage = () => {
                         </TabContext>
                     </div>
                 </Paper>
+
             }
+            <TabContext value={reservationsTab}>
+                <Box className='tabListContainer'>
+                    <TabList centered={true} style={{display: "flex", justifyContent: "center"}}
+                             onChange={handleReservationsTabChange}
+                             aria-label="lab API tabs example"
+                             indicatorColor="primary"
+                             textColor="primary"
+                    >
+                        <Tab className='tab' label="Old Hotel Reservations" value="old-hotels"/>
+                        <Tab className='tab' label="Future Hotel Reservations" value="future-hotels"/>
+                        <Tab className='tab' label="Old Flight Reservations" value="old-flights"/>
+                        <Tab className='tab' label="Future Flight Reservations" value="future-flights"/>
+                    </TabList>
+                </Box>
+                <TabPanel value="old-hotels" className='tabPanel'>
+                        {userReservedPastHotels.map((hotel) => (
+                            <FavoriteHotelCard
+                                key={hotel.externalId}
+                                id={hotel.externalId}
+                                hotelName={hotel.name}
+                                city={hotel.city}
+                                imageUrl={hotel.photoMainUrl}
+                            />
+                        ))}
+                </TabPanel>
+                <TabPanel value="future-hotels" className='tabPanel'>
+                    <div className='reserved-hotels-wrapper'>
+                        {userReservedFutureHotels.map((hotel) => (
+                            <div className='reserved-hotels-container'>
+                                <div className='reserved-hotels-card'>
+                                    <div style={{width: '18rem'}}>
+                                        <FavoriteHotelCard
+                                            key={hotel.externalId}
+                                            id={hotel.externalId}
+                                            hotelName={hotel.name}
+                                            city={hotel.city}
+                                            imageUrl={hotel.photoMainUrl}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='reservation-container'>
+                                    <h4 className='reservation-date'>
+                                        Reservation date: {hotel.reservationDate}
+                                    </h4>
+                                    <h4 className='reservation-date-range'>
+                                        Your reservation is from {hotel.checkInDate} to {hotel.checkInDate}
+                                    </h4>
+                                    <h5 className='reservation-price'>
+                                        You paid total price of {hotel.currency} {hotel.price}
+                                    </h5>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </TabPanel>
+                <TabPanel value="old-flights" className='tabPanel'>
+                    Item Three
+                </TabPanel>
+                <TabPanel value="future-flights" className='tabPanel'>
+                    <div className='reserved-flights-wrapper'>
+                        {userReservedFutureFlights.map((flight) => (
+                            <ReservedFlightTicketCard flight={flight}/>
+                        ))
+                        }
+                    </div>
+                </TabPanel>
+            </TabContext>
         </>
     )
 };

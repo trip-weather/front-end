@@ -12,7 +12,7 @@ import {likeHotel, unlikeHotel} from "../services/UserService";
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 300,
-        marginBottom: theme.spacing(2),
+        // marginBottom: theme.spacing(2),
         borderRadius: 10,
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
         position: 'relative',
