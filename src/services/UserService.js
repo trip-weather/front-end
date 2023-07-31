@@ -182,3 +182,23 @@ export const unlikeHotel = async (id) => {
         }
     });
 }
+
+export const getUserReservedHotels = (status) => {
+    return axios.get(`${API_URL_FULL}/user/profile/reservations/hotel?status=${status}`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export const getUserReservedFlights = (status) => {
+    return axios.get(`${API_URL_FULL}/user/profile/reservations/flight-tickets?status=${status}`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        }
+    });
+}

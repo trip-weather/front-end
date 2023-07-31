@@ -36,10 +36,10 @@ function App() {
                         </Route>
                         <Route element={<PrivateRoutes/>} exact>
                             <Route path='/profile' element={<Profile/>}></Route>
-                            <Route path='/search' element={<SearchPage/>}></Route>
                             <Route path='/payment-outcome' element={<PaymentOutcome/>}></Route>
                             <Route path='/payment-outcome-flight' element={<PaymentOutcomeFlight/>}></Route>
                         </Route>
+                        <Route path='/search' element={<SearchPage/>}></Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>
                     </Route>

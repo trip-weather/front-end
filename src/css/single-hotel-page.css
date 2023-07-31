@@ -51,7 +51,15 @@
     display: flex;
     gap: 1rem;
 }
+.single-hotel-left-container {
+    display: flex;
+    width: 65%;
+    gap: 1rem;
+}
 
+.single-hotel-right-container {
+    width: 35%;
+}
 .single-hotel-main-picture-swiper {
     position: relative;
     width: 29.75rem;
@@ -59,25 +67,21 @@
     border-radius: 1rem;
     overflow: hidden;
 }
-
 .single-hotel-secondary-pictures-container {
     display: flex;
     flex-direction: column;
     align-content: flex-start;
     gap: 1rem;
 }
-
 .single-hotel-secondary-picture {
     width: 6.6875rem;
     height: 6.6875rem;
     border-radius: 1rem;
     overflow: hidden;
 }
-
 .single-hotel-description-container {
     margin: 2rem 0;
 }
-
 .single-hotel-description {
     color: #4F686C;
     font-family: var(--secondary-font-family);
@@ -87,15 +91,12 @@
     line-height: 1.5rem;
     letter-spacing: 0.051px;
 }
-
 .property-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
 }
-
-/* Styling for each property */
 .property {
     max-width: 30%;
     display: flex;
@@ -106,13 +107,15 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
 }
-
-/* Styling for the property text */
-/*.property-text {*/
-/*    background-color: c;*/
-/*}*/
-
-/* Animation when hovering over a property */
+.already-booked-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #357a38;
+    margin: .2rem 0 1.2rem 0;
+}
+.already-booked-text i {
+    color: #000;
+}
 .property:hover {
     transform: scale(1.05);
 }

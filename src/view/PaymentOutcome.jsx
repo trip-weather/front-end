@@ -135,12 +135,13 @@ const PaymentOutcome = () => {
                     departDate: payment.checkInDate,
                     returnDate: payment.checkOutDate,
                     origin: payment.city,
-                    destination: 'London',
+                    destination: city,
                     adults: 2
                 };
 
                 setFlightTicketLoading(true);
                 const response = await getFlightTicketsByDirections(params);
+                console.log(response.data.data)
                 setFlights(response.data.data);
                 setFlightTicketLoading(false);
             }
@@ -274,10 +275,7 @@ const PaymentOutcome = () => {
                     </section>
                 </>
             }
-
-
         </div>
-
     );
 };
 
