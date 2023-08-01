@@ -29,11 +29,8 @@ export default function HotelCard({hotel}) {
         reviewScoreWord
     } = hotel;
 
-    console.log(hotel)
-    console.log(hotel.priceBreakdown);
     const price = priceBreakdown.grossPrice.value.toFixed(2);
     const currency = priceBreakdown.grossPrice.currency;
-
 
     return (
         <Card sx={{

@@ -14,7 +14,7 @@ export default function SuggestTownsSection({ handleSubmit }) {
 
         const modified = { ...data, city: town + '' };
         setData(modified);
-        handleSubmit(modified);
+        handleSubmit();
     };
 
     const towns = [
