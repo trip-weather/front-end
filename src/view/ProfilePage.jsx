@@ -27,7 +27,7 @@ const ProfilePage = () => {
     const {notification, setNotification} = useContext(NotificationContext);
 
     const [tab, setTab] = React.useState('info');
-    const [reservationsTab, setReservationsTab] = React.useState('hotels');
+    const [reservationsTab, setReservationsTab] = React.useState('future-hotels');
     const [userData, setUserData] = useState({});
     const [userReservedPastHotels, setUserReservedPastHotels] = useState([]);
     const [userReservedFutureHotels, setUserReservedFutureHotels] = useState([]);
@@ -303,15 +303,34 @@ const ProfilePage = () => {
                     </TabList>
                 </Box>
                 <TabPanel value="old-hotels" className='tabPanel'>
+                    <div className='reserved-hotels-wrapper'>
                         {userReservedPastHotels.map((hotel) => (
-                            <FavoriteHotelCard
-                                key={hotel.externalId}
-                                id={hotel.externalId}
-                                hotelName={hotel.name}
-                                city={hotel.city}
-                                imageUrl={hotel.photoMainUrl}
-                            />
+                            <div className='reserved-hotels-container'>
+                                <div className='reserved-hotels-card'>
+                                    <div style={{width: '18rem'}}>
+                                        <FavoriteHotelCard
+                                            key={hotel.externalId}
+                                            id={hotel.externalId}
+                                            hotelName={hotel.name}
+                                            city={hotel.city}
+                                            imageUrl={hotel.photoMainUrl}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='reservation-container'>
+                                    <h4 className='reservation-date'>
+                                        Reservation date: {hotel.reservationDate}
+                                    </h4>
+                                    <h4 className='reservation-date-range'>
+                                        Your reservation is from {hotel.checkInDate} to {hotel.checkInDate}
+                                    </h4>
+                                    <h5 className='reservation-price'>
+                                        You paid total price of {hotel.currency} {hotel.price}
+                                    </h5>
+                                </div>
+                            </div>
                         ))}
+                    </div>
                 </TabPanel>
                 <TabPanel value="future-hotels" className='tabPanel'>
                     <div className='reserved-hotels-wrapper'>
@@ -344,7 +363,12 @@ const ProfilePage = () => {
                     </div>
                 </TabPanel>
                 <TabPanel value="old-flights" className='tabPanel'>
-                    Item Three
+                    <div className='reserved-flights-wrapper'>
+                        {userReservedPastFlights.map((flight) => (
+                            <ReservedFlightTicketCard flight={flight}/>
+                        ))
+                        }
+                    </div>
                 </TabPanel>
                 <TabPanel value="future-flights" className='tabPanel'>
                     <div className='reserved-flights-wrapper'>

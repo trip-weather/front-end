@@ -10,7 +10,7 @@ import {getSuggestedHotels, searchHotels} from "../services/HotelService";
 function SearchPage() {
 
     const [foundHotels, setFoundHotels] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [searchData, setSearchData] = useState(DefaultSearch.data);
     function handleSubmit(data) {
         console.debug(data);
@@ -31,6 +31,8 @@ function SearchPage() {
         } else {
             searchHotels(data)
                 .then((response) => {
+                    console.log("here")
+                    console.log(response.data)
                     setFoundHotels(response.data[0].results);
                     setIsLoading(false);
                 })

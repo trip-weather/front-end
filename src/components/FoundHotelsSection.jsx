@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 
 import '../css/found-hotels-section.css'
 
-function FoundHotelsSection({hotels}) {
+function FoundHotelsSection({isLoading, hotels}) {
 
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(6);
@@ -21,39 +21,47 @@ function FoundHotelsSection({hotels}) {
 
     return (
         <>
-            {/*{isLoading &&*/}
-            {/*    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>*/}
-            {/*        <CircularProgress/>*/}
-            {/*    </div>*/}
-            {/*}*/}
-            {/*{*/}
-            {/*    !isLoading &&*/}
-                <Box sx={{backgroundColor: '#fff', padding: '40px 0'}}>
-                    <Container>
-                        <Typography variant="h4" component="h2" align="center" gutterBottom>
-                            Result of search
-                        </Typography>
+            <Box sx={{backgroundColor: '#fff', padding: '40px 0'}}>
+                <Container>
+                    <Typography variant="h4" component="h2" align="center" gutterBottom>
+                        Result of search
+                    </Typography>
+                    {isLoading &&
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100vh'
+                        }}>
+                            <CircularProgress/>
+                        </div>
+                    }
+                    {
+                        !isLoading &&
                         <Grid>
-                            <div className={'found-hotels-container'}>
-                                {displayHotels.map((hotel) => (
-                                    <HotelCard key={hotel.id} hotel={hotel} sx={{maxWidth: 345}}/>
-                                ))}
-                            </div>
+                            {displayHotels.length > 0 ? (
+                                <div className={'found-hotels-container'}>
+                                    {displayHotels.map((hotel) => (
+                                        <HotelCard key={hotel.id} hotel={hotel} sx={{ maxWidth: 345 }} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div>No hotels found.</div>
+                            )}
                         </Grid>
-
-                        <Grid container
-                              sx={{mt: 4}}
-                              justifyContent="center"
-                              alignItems="center" style={{width: '100%'}}>
-                            <Grid item>
-                                <Pagination count={Math.ceil(hotels.length / count)}
-                                            onChange={(event, page) => setOffset(page - 1)}
-                                            variant="outlined" color="secondary"/>
-                            </Grid>
+                    }
+                    <Grid container
+                          sx={{mt: 4}}
+                          justifyContent="center"
+                          alignItems="center" style={{width: '100%'}}>
+                        <Grid item>
+                            <Pagination count={Math.ceil(hotels.length / count)}
+                                        onChange={(event, page) => setOffset(page - 1)}
+                                        variant="outlined" color="secondary"/>
                         </Grid>
-
-                    </Container>
-                </Box>
+                    </Grid>
+                </Container>
+            </Box>
             }
         </>
     );
