@@ -10,13 +10,13 @@ import {getSuggestedHotels, searchHotels} from "../services/HotelService";
 function SearchPage() {
 
     const [foundHotels, setFoundHotels] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [searchData, setSearchData] = useState(DefaultSearch.data);
-    function handleSubmit(data) {
-        console.debug(data);
+    function handleSubmit() {
+        console.debug(searchData);
 
         setIsLoading(true);
-        if (data.city == null && data.minTemp == null && data.maxTemp == null && data.period == null) {
+        if (searchData.city == null && searchData.minTemp == null && searchData.maxTemp == null && searchData.period == null) {
             getSuggestedHotels()
                 .then((response) => {
                     console.log(response);
@@ -29,8 +29,11 @@ function SearchPage() {
                     setIsLoading(false);
                 });
         } else {
+            const data = { ...searchData, filters: [...searchData.filters].join(',') };
+
             searchHotels(data)
                 .then((response) => {
+                    console.log(response.data)
                     setFoundHotels(response.data[0].results);
                     setIsLoading(false);
                 })

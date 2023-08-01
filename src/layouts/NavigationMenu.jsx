@@ -64,6 +64,7 @@ function NavigationMenu() {
                         component="a"
                         href="/"
                         style={{
+                            marginRight: '2rem',
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
@@ -136,27 +137,37 @@ function NavigationMenu() {
                     </Typography>
                     {/* Main navigation */}
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-
-                        {/*{userAuth.isAuthenticated && <NavLink style={{*/}
-                        {/*    my: 2,*/}
-                        {/*    color: 'white',*/}
-                        {/*    display: 'block',*/}
-                        {/*    marginRight: '20px',*/}
-                        {/*    textDecoration: 'none'*/}
-                        {/*}} to={"/profile"}>Profile</NavLink>}*/}
+                        {userAuth.isAuthenticated && <NavLink style={{
+                            my: 2,
+                            color: 'white',
+                            display: 'block',
+                            marginRight: '20px',
+                            textDecoration: 'none',
+                            fontWeight: 'bold',
+                        }} to={"/search"}>Search</NavLink>}
+                        {userAuth.isAuthenticated && <NavLink style={{
+                            my: 2,
+                            color: 'white',
+                            display: 'block',
+                            marginRight: '20px',
+                            textDecoration: 'none',
+                            fontWeight: 'bold',
+                        }} to={"/"}>Home</NavLink>}
                         {!userAuth.isAuthenticated && <NavLink style={{
                             my: 2,
                             color: 'white',
                             display: 'block',
                             marginRight: '20px',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            fontWeight: 'bold',
                         }} to={"/sign-in"}>Login</NavLink>}
                         {!userAuth.isAuthenticated && <NavLink style={{
                             my: 2,
                             color: 'white',
                             display: 'block',
                             marginRight: '20px',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            fontWeight: 'bold'
                         }} to={"/sign-up"}>Register</NavLink>}
                         {/*{userAuth.isAuthenticated && <Button style={{*/}
                         {/*    my: 2,*/}
@@ -169,7 +180,8 @@ function NavigationMenu() {
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>*/}
+                                <Avatar sx={{ backgroundColor: '#85586F'}}>M</Avatar>
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -188,6 +200,7 @@ function NavigationMenu() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                            <MenuItem></MenuItem>
                             {/*{settings.map((setting) => (*/}
                             {/*    <MenuItem key={setting} onClick={handleCloseUserMenu}>*/}
                             {/*        <Typography textAlign="center">{setting}</Typography>*/}

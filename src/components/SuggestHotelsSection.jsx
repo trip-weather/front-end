@@ -17,48 +17,7 @@ export default function SuggestHotelsSection() {
 
     const [hotels, setHotels] = useState([]);
     const [city, setCity] = useState(null);
-
-
-    // useEffect(() => {
-    //     const fetchUserLocation = async () => {
-    //         try {
-    //             const location = await getUserLocation();
-    //             console.log(location);
-    //             if (location !== null) {
-    //                 const city = await getCityFromLatLng(location.latitude, location.longitude);
-    //                 setCity(city);
-    //                 console.log(city);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching user location:', error);
-    //         }
-    //     };
-    //
-    //     fetchUserLocation();
-    // }, []);
-    //
-    // useEffect(() => {
-    //     const fetchHotels = async () => {
-    //         try {
-    //             console.log(city)
-    //             if (city !== null) {
-    //                 console.log("inside if")
-    //                 const response =  await getSuggestedHotelsByLocation(city);
-    //                 console.log(response);
-    //                 // setHotels(response.data);
-    //             } else {
-    //                 const response = await getSuggestedHotels();
-    //                 setHotels(response.data);
-    //             }
-    //
-    //         } catch (error) {
-    //             console.log('Error fetching hotels:', error);
-    //         }
-    //     };
-    //
-    //     fetchHotels();
-    // }, [city]);
-
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchHotelsBasedOnLocation = async () => {
@@ -71,20 +30,18 @@ export default function SuggestHotelsSection() {
                     console.log(city);
 
                     if (city !== null) {
-                        console.log("inside if");
                         const response = await getSuggestedHotelsByLocation(city);
-                        console.log("hotels",response);
-                        console.log("hotels",response.data[0].results);
                         setHotels(response.data[0].results);
-                        console.log(hotels)
+                        setIsLoading(false);
                     }
                 } else {
                     const suggestedHotels = (await getSuggestedHotels()).data;
-                    console.log(suggestedHotels);
                     setHotels(suggestedHotels);
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error('Error fetching user location:', error);
+                setIsLoading(false);
             }
         };
 
@@ -94,43 +51,57 @@ export default function SuggestHotelsSection() {
 
     return (
         <>
-           <Box sx={{backgroundColor: '#f5f5f5', padding: '40px 0'}}>
-                <Container maxWidth="lg">
-                    <Typography variant="h4" component="h2" align="center" gutterBottom>
-                        Suggested based on your location and time frame
-                    </Typography>
-                    <Swiper
-                        modules={[Autoplay, Navigation]}
-                        effect="cards"
-                        speed={1000}
-                        navigation={true}
-                        autoplay={{delay: 1200, disableOnInteraction: false}}
-                        loop
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper) => console.log(swiper)}
-                        breakpoints={{
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 25,
-                            },
-                            640: {
-                                slidesPerView: 1.5,
-                                spaceBetween: 40,
-                            },
-                            768: {
-                                slidesPerView: 3,
-                                spaceBetween: 50,
-                            },
-                        }}
-                    >
-                        {hotels.map((hotel) => (
-                            <SwiperSlide key={hotel.id}>
-                                <HotelCard hotel={hotel} sx={{maxWidth: 345}}/>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </Container>
-            </Box>
+            {isLoading &&
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                }}>
+                    <CircularProgress/>
+                </div>
+            }
+            {
+                !isLoading &&
+                <Box sx={{backgroundColor: '#f5f5f5', padding: '40px 0'}}>
+                    <Container maxWidth="lg">
+                        <Typography variant="h4" component="h2" align="center" gutterBottom>
+                            Suggested based on your location and time frame
+                        </Typography>
+                        <Swiper
+                            modules={[Autoplay, Navigation]}
+                            effect="cards"
+                            speed={1000}
+                            navigation={true}
+                            autoplay={{delay: 1200, disableOnInteraction: false}}
+                            loop
+                            onSlideChange={() => console.log('slide change')}
+                            onSwiper={(swiper) => console.log(swiper)}
+                            breakpoints={{
+                                320: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 25,
+                                },
+                                640: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 40,
+                                },
+                                768: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 50,
+                                },
+                            }}
+                        >
+                            {hotels.map((hotel) => (
+                                <SwiperSlide key={hotel.id}>
+                                    <HotelCard hotel={hotel} sx={{maxWidth: 345}}/>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </Container>
+                </Box>
+            }
         </>
     )
+
 }

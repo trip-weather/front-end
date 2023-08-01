@@ -7,7 +7,6 @@ import AuthContext, {AuthDefaults} from './contexts/auth.context';
 import RootLayout from './layouts/RootLayout';
 import Profile from './view/ProfilePage';
 import PublicRoutes from './routes/PublicRoutes';
-
 import {BrowserRouter, Route, Routes,} from "react-router-dom";
 import ForgottenPassword from './view/ForgottenPassword';
 import ResetPassword from './view/ResetPassword';
@@ -17,6 +16,8 @@ import SingleHotelPage from "./view/SingleHotelPage";
 import ActivateProfile from "./components/ActivateProfile";
 import PaymentOutcome from "./view/PaymentOutcome";
 import PaymentOutcomeFlight from "./view/PaymentOutcomeFlight";
+import Home from "./view/home/Home";
+import NotFound from "./view/NotFound";
 
 
 function App() {
@@ -42,6 +43,8 @@ function App() {
                         <Route path='/search' element={<SearchPage/>}></Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>
+                        <Route path='' element={<Home/>}></Route>
+                        <Route path='/not-found' element={<NotFound/>}></Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

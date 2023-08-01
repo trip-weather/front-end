@@ -29,11 +29,8 @@ export default function HotelCard({hotel}) {
         reviewScoreWord
     } = hotel;
 
-    console.log(hotel)
-    console.log(hotel.priceBreakdown);
     const price = priceBreakdown.grossPrice.value.toFixed(2);
     const currency = priceBreakdown.grossPrice.currency;
-
 
     return (
         <Card sx={{
@@ -47,19 +44,27 @@ export default function HotelCard({hotel}) {
                 boxShadow: '0px 10px 10px rgba(0, 0, 0, 0.2)',
             },
         }}>
-            <CardHeader
-                avatar={
-                    <Avatar sx={{bgcolor: red[500]}} aria-label="recipe">
-                        R
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="settings">
-                        <FavoriteIcon style={{color: '#FFC0CB'}}/>
-                    </IconButton>
-                }
-                title={name}
-                subheader={`${checkinDate} - ${checkoutDate}`}
+            <CardHeader style={{height: '100px', width: '100%'}}
+                        avatar={
+                            <Avatar sx={{bgcolor: red[500]}} aria-label="recipe">
+                                R
+                            </Avatar>
+                        }
+                        action={
+                            <IconButton aria-label="settings">
+                                <FavoriteIcon style={{color: '#FFC0CB'}}/>
+                            </IconButton>
+                        }
+                        title={
+                            <Typography
+                                sx={{
+                                    maxWidth: '150px',
+                                }}
+                            >
+                                {name}
+                            </Typography>
+                        }
+                        subheader={`${checkinDate} - ${checkoutDate}`}
             />
 
             <Box
@@ -74,16 +79,16 @@ export default function HotelCard({hotel}) {
                     value={propertyClass}
                     readOnly
                     precision={0.5}
-                    emptyIcon={<StarIcon style={{ opacity: 0.55}} fontSize="inherit"/>}
+                    emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
                 />
-                <Box sx={{ ml: 2}}>{reviewScoreWord}</Box>
+                <Box sx={{ml: 2}}>{reviewScoreWord}</Box>
             </Box>
 
-            <CardMedia
-                component="img"
-                height="194"
-                image={photoMainUrl}
-                alt="Paella dish"
+            <CardMedia style={{maxWidth: '100%'}}
+                       component="img"
+                       height="194"
+                       image={photoMainUrl}
+                       alt="Paella dish"
             />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
