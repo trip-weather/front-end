@@ -56,9 +56,12 @@ export default function SuggestHotelsSection() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh'
+                    height: '30vh'
                 }}>
                     <CircularProgress/>
+                    <div style={{paddingLeft: '1.5rem', color: 'red', fontSize: '16px', fontWeight: 'bold'}}>
+                        You should enable your browser location!
+                    </div>
                 </div>
             }
             {
