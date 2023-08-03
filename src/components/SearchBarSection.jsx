@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useContext, useState} from 'react';
-import {styled} from '@mui/material/styles';
+import {createTheme, styled, ThemeProvider} from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -14,8 +14,6 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import MuseumIcon from '@mui/icons-material/Museum';
 import ParkIcon from '@mui/icons-material/Park';
 import CloseIcon from '@mui/icons-material/Close';
-
-
 
 
 const Input = styled(MuiInput)`
@@ -46,15 +44,24 @@ const marks = [
     },
 ];
 
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#85586F',
+        },
+    },
+});
+
 function SearchBarSection({handleSubmit}) {
+
     const {data, setData} = useContext(SearchContext);
 
     const [period, setPeriod] = useState(0);
     const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
     const [appliedFilters, setAppliedFilters] = useState({
-        ['museum']: { selected: false },
-        ['fitness']: { selected: false },
-        ['park']: { selected: false },
+        ['museum']: {selected: false},
+        ['fitness']: {selected: false},
+        ['park']: {selected: false},
     });
 
     const handlePeriod = (event) => {
@@ -63,7 +70,7 @@ function SearchBarSection({handleSubmit}) {
     };
 
     const toggleFilterSelection = (value) => {
-        setAppliedFilters(previous => ({ ...previous, [value]: { selected: !previous[value].selected } }));
+        setAppliedFilters(previous => ({...previous, [value]: {selected: !previous[value].selected}}));
 
         setData((previous) => ({
             ...previous,
@@ -132,34 +139,50 @@ function SearchBarSection({handleSubmit}) {
                         <Button style={{backgroundColor: '#85586F'}}
                                 fullWidth
                                 variant="contained" sx={{px: '40px'}}
-                                endIcon={<SearchIcon/>} onClick={() => handleSubmit()}>Search</Button>
+                                endIcon={<SearchIcon/>} onClick={() => handleSubmit(data)}>Search</Button>
                     </div>
                 </div>
                 <div className={'down-filters-container'}>
-                    <Button
-                        variant={ appliedFilters['fitness'].selected ? 'contained' : 'outlined' }
-                        color={ appliedFilters['fitness'].selected ? 'error' : 'primary' }
-                        startIcon={ appliedFilters['fitness'].selected ? <CloseIcon/> : <FitnessCenterIcon />}
-                        onClick={() => toggleFilterSelection('fitness') }
-                    >
-                        Fitness center
-                    </Button>
-                    <Button
-                        variant={ appliedFilters['park'].selected ? 'contained' : 'outlined' }
-                        color={ appliedFilters['park'].selected ? 'error' : 'primary' }
-                        startIcon={ appliedFilters['park'].selected ? <CloseIcon/> : <ParkIcon />}
-                        onClick={() => toggleFilterSelection('park') }
-                    >
-                        Park and gardens
-                    </Button>
-                    <Button
-                        variant={ appliedFilters['museum'].selected ? 'contained' : 'outlined' }
-                        color={ appliedFilters['museum'].selected ? 'error' : 'primary' }
-                        startIcon={ appliedFilters['museum'].selected ? <CloseIcon/> : <MuseumIcon /> }
-                        onClick={() => toggleFilterSelection('museum') }
-                    >
-                        Museum
-                    </Button>
+                    <ThemeProvider theme={theme}>
+                        <Button style={{
+                            border: `4px solid ${appliedFilters['fitness'].selected ? '#f44336' : '#85586F'}`,
+                            borderRadius: 20,
+                            fontWeight: 'bold',
+                        }}
+                                variant={appliedFilters['fitness'].selected ? 'contained' : 'outlined'}
+                                color={appliedFilters['fitness'].selected ? 'error' : 'primary'}
+                                startIcon={appliedFilters['fitness'].selected ? <CloseIcon/> : <FitnessCenterIcon/>}
+                                onClick={() => toggleFilterSelection('fitness')}
+                        >
+                            Fitness center
+                        </Button>
+                        <Button style={{
+                            border: `4px solid ${appliedFilters['park'].selected ? '#f44336' : '#85586F'}`,
+                            borderRadius: 20,
+                            fontWeight: 'bold',
+                        }}
+                                variant={appliedFilters['park'].selected ? 'contained' : 'outlined'}
+                                color={appliedFilters['park'].selected ? 'error' : 'primary'}
+                                startIcon={appliedFilters['park'].selected ? <CloseIcon/> : <ParkIcon/>}
+                                onClick={() => toggleFilterSelection('park')}
+                        >
+                            Park and gardens
+                        </Button>
+
+                        <Button
+                            style={{
+                                border: `4px solid ${appliedFilters['museum'].selected ? '#f44336' : '#85586F'}`,
+                                borderRadius: 20,
+                                fontWeight: 'bold',
+                            }}
+                            variant={appliedFilters['museum'].selected ? 'contained' : 'outlined'}
+                            color={appliedFilters['museum'].selected ? 'error' : 'primary'}
+                            startIcon={appliedFilters['museum'].selected ? <CloseIcon/> : <MuseumIcon/>}
+                            onClick={() => toggleFilterSelection('museum')}
+                        >
+                            Museum
+                        </Button>
+                    </ThemeProvider>
                 </div>
             </div>
         </>

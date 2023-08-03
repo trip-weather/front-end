@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, CircularProgress, Divider, Typography} from '@mui/material';
+import {Button, CircularProgress, Divider, Modal, Typography} from '@mui/material';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -16,6 +16,9 @@ import Box from "@mui/material/Box";
 import {likeHotel, unlikeHotel} from "../services/UserService";
 import '../css/single-hotel-page.css'
 import {checkIsUserAuthenticated} from "../services/AuthServicce";
+import NearbyCard from "../components/NearbyCard";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -53,11 +56,14 @@ const SingleHotelPage = ({}) => {
     const queryParams = new URLSearchParams(search);
     const checkinDate = queryParams.get('checkIn');
     const checkoutDate = queryParams.get('checkOut');
+    const nearby = queryParams.get('nearby') ?? null;
 
     const [isLoading, setIsLoading] = useState(true);
     const [isHotelReservedByUser, setIsHotelReservedByUser] = useState(false);
     const [isHotelReservedByUserInPeriod, setIsHotelReservedByUserInPeriod] = useState(false);
     const [hotelData, setHotelData] = useState();
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
 
@@ -65,12 +71,26 @@ const SingleHotelPage = ({}) => {
 
     const {userAuth} = useContext(AuthContext);
 
+    const handlePhotoClick = (photo) => {
+        setSelectedPhoto(photo);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedPhoto(null);
+        setIsModalOpen(false);
+    };
+
     useEffect(() => {
         setIsHotelReservedByUser(userAuth.user.reserved.includes(Number.parseInt(id)));
 
-        getSingleHotel(id, checkinDate, checkoutDate)
+        getSingleHotel(id, checkinDate, checkoutDate, nearby)
             .then(response => {
+                console.log(nearby);
                 setHotelData(response.data);
+                console.log(response.data);
+                console.log(response.data.nearby);
+
                 setIsLoading(false);
                 const liked = userAuth.isAuthenticated && userAuth.user.liked.includes(response.data.hotelId);
                 setIsLiked(liked);
@@ -173,8 +193,8 @@ const SingleHotelPage = ({}) => {
                                             effect="cards"
                                             speed={2500}
                                             pagination={true}
-                                            loop={false}
-                                            autoplay={{delay: 500000, disableOnInteraction: false}}
+                                            loop={true}
+                                            autoplay={{delay: 1000, disableOnInteraction: true}}
                                             onSlideChange={() => console.log('slide change')}
                                             onSwiper={(swiper) => console.log(swiper)}
                                             breakpoints={{
@@ -185,12 +205,51 @@ const SingleHotelPage = ({}) => {
                                             }}
                                         >
                                             {hotelData.photos.map((photo, index) => (
-                                                <SwiperSlide style={{height: '100%'}} id={index}>
+                                                <SwiperSlide style={{height: '100%'}} id={index}
+                                                             onClick={() => handlePhotoClick(photo)}>
                                                     <img src={photo.urlMax}
                                                          style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
                                                 </SwiperSlide>
                                             ))}
                                         </Swiper>
+                                        <Modal
+                                            open={isModalOpen}
+                                            onClose={handleCloseModal}
+                                            aria-labelledby="photo-modal-title"
+                                            aria-describedby="photo-modal-description"
+                                        >
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                position: 'relative',
+                                                width: '1000px',
+                                            }}>
+                                                {selectedPhoto && (
+                                                    <img
+                                                        src={selectedPhoto.urlMax}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            objectFit: 'contain',
+                                                            maxHeight: '80vh'
+                                                        }}
+                                                        alt={`Hotel Photo ${selectedPhoto.index}`}
+                                                    />
+                                                )}
+                                                <IconButton
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: 10,
+                                                        right: 10,
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                                                    }}
+                                                    onClick={handleCloseModal}
+                                                >
+                                                    <CloseIcon/>
+                                                </IconButton>
+                                            </div>
+                                        </Modal>
                                     </div>
                                     <div className="single-hotel-secondary-pictures-container">
                                         {
@@ -213,20 +272,20 @@ const SingleHotelPage = ({}) => {
                                                 {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
                                             </Typography>
                                             <Divider/>
-                                            <div className={classes.ratingContainer}>
-                                                <StarIcon className={classes.ratingIcon}/>
-                                                <Typography variant="body2">Rating:</Typography>
-                                                <Rating value={hotelData.rating} precision={0.5} readOnly/>
-                                            </div>
+                                            {/*<div className={classes.ratingContainer}>*/}
+                                            {/*    <StarIcon className={classes.ratingIcon}/>*/}
+                                            {/*    <Typography variant="body2">Rating:</Typography>*/}
+                                            {/*    <Rating value={hotelData.rating} precision={0.5} readOnly/>*/}
+                                            {/*</div>*/}
                                             <Divider/>
                                             <Typography variant="body1" className={classes.reviewText}>
-                                                Price for {hotelData.pricePerDay} night:
+                                                Price per night: {hotelData.pricePerDay}
                                             </Typography>
                                             <Divider/>
                                             <Typography variant="body1">Total Price
                                                 for {hotelData.nights} days:</Typography>
                                             <Typography variant="h6" color="primary">
-                                                ${hotelData.totalPrice}
+                                                ${hotelData.totalPrice.toFixed(2)}
                                             </Typography>
                                             <Button onClick={handleMakeReservation}
                                                     variant="contained" style={{backgroundColor: '#85586F'}}>Make a
@@ -276,6 +335,12 @@ const SingleHotelPage = ({}) => {
                                         </div>
                                     </React.Fragment>
                                 ))}
+                            </div>
+                            <div className="property-list">
+                                {Object.keys(hotelData.nearby).map((key, index) => {
+                                    return <NearbyCard key={index} nearby={hotelData.nearby[key]}></NearbyCard>
+                                })
+                                }
                             </div>
                         </div>
                     </div>

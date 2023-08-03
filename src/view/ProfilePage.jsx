@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import {Avatar, Paper, Typography,} from '@material-ui/core';
-import {CircularProgress, Tab} from "@mui/material";
+import {CircularProgress, Pagination, Tab} from "@mui/material";
 import {TabContext} from "@mui/lab";
 import Box from "@mui/material/Box";
 import {getUserUuid} from "../services/AuthServicce";
@@ -20,6 +20,7 @@ import NotificationContext from "../contexts/notification.context";
 import '../css/profile-page.css'
 import FavoriteHotelCard from "../components/FavouriteHotelCard";
 import ReservedFlightTicketCard from "../components/ReservedFlightTicketCard";
+import {Link} from "react-router-dom";
 
 
 const ProfilePage = () => {
@@ -34,6 +35,10 @@ const ProfilePage = () => {
     const [userReservedPastFlights, setUserReservedPastFlights] = useState([]);
     const [userReservedFutureFlights, setUserReservedFutureFlights] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [count, setCount] = useState(3);
+    const [offset, setOffset] = useState(0);
+    const [displayHotels, setDisplayHotels] = useState([]);
+
 
     const [passwordData, setPasswordData] = useState({
         oldPassword: '',
@@ -65,7 +70,6 @@ const ProfilePage = () => {
         });
     };
 
-
     const userUuid = getUserUuid();
     useEffect(() => {
         setIsLoading(true);
@@ -73,6 +77,7 @@ const ProfilePage = () => {
         getProfile()
             .then(response => {
                 console.log(response.data);
+
                 setUserData(response.data);
                 setIsLoading(false);
             })
@@ -115,6 +120,12 @@ const ProfilePage = () => {
     }, [userUuid]);
 
 
+    useEffect(() => {
+        const part = userData.favouriteHotels?.slice(count * offset, (count * offset) + count);
+        setDisplayHotels(part || []);
+
+    }, [offset, count, userData.favouriteHotels]);
+
     function handleChangePassword(event) {
         event.preventDefault();
 
@@ -156,7 +167,7 @@ const ProfilePage = () => {
             }
             {
                 !isLoading &&
-                <Paper sx={{mt: 2}} className="root">
+                <Paper sx={{mt: '2rem'}} className="root">
                     <div className="avatarContainer">
                         <Avatar className="avatar" src={'/path/to/avatar.jpg'} alt="User Avatar"/>
                     </div>
@@ -175,17 +186,46 @@ const ProfilePage = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value="favourite">
-                                <div>
-                                    {userData.favouriteHotels.map((hotel) => (
-                                        <FavoriteHotelCard
-                                            key={hotel.externalId}
-                                            id={hotel.externalId}
-                                            hotelName={hotel.name}
-                                            city={hotel.city}
-                                            imageUrl={hotel.photoMainUrl}
-                                        />
-                                    ))}
-                                </div>
+                                {/*<div>*/}
+                                {/*    {userData.favouriteHotels.map((hotel) => (*/}
+                                {/*        <FavoriteHotelCard*/}
+                                {/*            key={hotel.externalId}*/}
+                                {/*            id={hotel.externalId}*/}
+                                {/*            hotelName={hotel.name}*/}
+                                {/*            city={hotel.city}*/}
+                                {/*            imageUrl={hotel.photoMainUrl}*/}
+                                {/*        />*/}
+                                {/*    ))}*/}
+                                {/*</div>*/}
+
+                                {displayHotels.length > 0 ? (
+                                    <div className='favourite-hotel-card'>
+                                        {displayHotels.map((hotel) => (
+                                            <Link to={`/hotel/${hotel.externalId}`} key={hotel.externalId}>
+                                                <FavoriteHotelCard
+                                                    key={hotel.externalId}
+                                                    id={hotel.externalId}
+                                                    hotelName={hotel.name}
+                                                    city={hotel.city}
+                                                    imageUrl={hotel.photoMainUrl}
+                                                />
+                                            </Link>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div>No added hotels to favourite</div>
+                                )
+                                }
+                                <Grid container
+                                      sx={{mt: 4}}
+                                      justifyContent="center"
+                                      alignItems="center" style={{width: '100%'}}>
+                                    <Grid item>
+                                        <Pagination count={Math.ceil(userData.favouriteHotels.length / count)}
+                                                    onChange={(event, page) => setOffset(page - 1)}
+                                                    variant="outlined" color="secondary"/>
+                                    </Grid>
+                                </Grid>
                             </TabPanel>
                             <TabPanel value="password">
                                 <form onSubmit={handleChangePassword}>

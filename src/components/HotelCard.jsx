@@ -15,10 +15,14 @@ import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 import {Link} from 'react-router-dom'
+import {likeHotel, unlikeHotel} from "../services/UserService";
+import {useState} from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 
 export default function HotelCard({hotel}) {
     const {
+        id,
         name,
         wishlistName,
         checkinDate,
@@ -26,13 +30,41 @@ export default function HotelCard({hotel}) {
         photoMainUrl,
         priceBreakdown,
         propertyClass,
-        reviewScoreWord
+        reviewScoreWord,
+        nearbyFilters
     } = hotel;
 
+    console.log(nearbyFilters);
+    const [isLiked, setIsLiked] = useState(false);
     const price = priceBreakdown.grossPrice.value.toFixed(2);
     const currency = priceBreakdown.grossPrice.currency;
 
+    const nearbyKeys = nearbyFilters ? Object.keys(nearbyFilters) : [];
+    const nearbyQueryParam = nearbyKeys.join(',');
+    const toggleLikedHotel = () => {
+        console.log(hotel);
+        console.log(hotel.nearbyFilters)
+        if (!isLiked) {
+            likeHotel(id)
+                .then(() => {
+                    setIsLiked((oldValue) => !oldValue);
+                    console.log("hotel is liked")
+                }).catch(error => {
+                console.log(error);
+            })
+
+        } else {
+            unlikeHotel(id)
+                .then(() => {
+                    setIsLiked((oldValue) => !oldValue);
+                    console.log("hotel is unliked")
+                }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
     return (
+
         <Card sx={{
             maxWidth: 345,
             border: '1px solid #e0e0e0',
@@ -51,8 +83,9 @@ export default function HotelCard({hotel}) {
                             </Avatar>
                         }
                         action={
-                            <IconButton aria-label="settings">
-                                <FavoriteIcon style={{color: '#FFC0CB'}}/>
+                            <IconButton onClick={toggleLikedHotel}>
+                                {isLiked ? <FavoriteIcon style={{color: '#B1001CFF'}}/> :
+                                    <FavoriteBorderIcon style={{color: '#B1001CFF'}}/>}
                             </IconButton>
                         }
                         title={
@@ -95,15 +128,27 @@ export default function HotelCard({hotel}) {
                     <LocationOnRoundedIcon sx={{color: red[500]}}/>
                     {wishlistName}
                 </Typography>
-                <Typography variant='body4' color="text.secondary"><b> Price per night : </b>{price} {currency}
+                <Typography variant='body4' color="text.secondary"><b> Total Price : </b>{price} {currency}
                 </Typography>
             </CardContent>
             <CardActions>
-                <Link to={`/hotel/${hotel.id}?checkIn=${checkinDate}&checkOut=${checkoutDate}`}>
+                <Link
+                    to={`/hotel/${hotel.id}?checkIn=${checkinDate}&checkOut=${checkoutDate}&nearby=${nearbyQueryParam}`}>
                     <Button variant="outlined" size="small">
-                        Виж детайли
+                        See Details
                     </Button>
                 </Link>
+                <div>
+                    <ul style={{marginLeft: '2rem'}}>
+                        {Object.keys((nearbyFilters ?? {})).map((key) => (
+                            <li key={key}>
+                                <Typography>
+                                    {key}: {nearbyFilters[key]}
+                                </Typography>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </CardActions>
         </Card>
     );

@@ -2,14 +2,20 @@ import axios from "axios";
 import {API_URL_FULL} from "../shared/constants";
 import {getAuthToken} from "./AuthServicce";
 
-export const getSingleHotel = (id, checkIn, checkOut) => {
+export const getSingleHotel = (id, checkIn, checkOut, nearby) => {
+    let url = `${API_URL_FULL}/hotel/${id}?checkIn=${checkIn}&checkOut=${checkOut}`
+
+    if (nearby !== null ){
+        url += `&nearby=${nearby}`
+    }
+
     return axios({
         method: 'get',
         headers: {
             'Access-Control-Allow-Origin': '*',
             "Content-Type": 'application/json',
         },
-        url: `${API_URL_FULL}/hotel/${id}?checkIn=${checkIn}&checkOut=${checkOut}`,
+        url: url,
     });
 };
 
