@@ -12,7 +12,7 @@
 
 .hotel-image {
     width: 96%;
-    height: 200px; /* Adjust the height as per your design */
+    height: 200px;
     object-fit: cover;
     transition: transform 0.5s ease-in-out;
 }

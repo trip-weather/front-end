@@ -14,6 +14,8 @@ import MuseumIcon from '@mui/icons-material/Museum';
 import ParkIcon from '@mui/icons-material/Park';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import NightlifeIcon from '@mui/icons-material/Nightlife';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 import '../css/search-bar-section.css'
 
@@ -61,7 +63,7 @@ function SearchBarSection({handleSubmit}) {
 
     const {data, setData} = useContext(SearchContext);
 
-    const [period, setPeriod] = useState(0);
+    const [period, setPeriod] = useState(5);
     const [isFilterSectionExtended, setIsFilterSectionExtended] = useState(false);
     const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
     const [appliedFilters, setAppliedFilters] = useState({
@@ -207,7 +209,7 @@ function SearchBarSection({handleSubmit}) {
                                     }}
                                     variant={appliedFilters['nightlife'].selected ? 'contained' : 'outlined'}
                                     color={appliedFilters['nightlife'].selected ? 'error' : 'primary'}
-                                    startIcon={appliedFilters['nightlife'].selected ? <CloseIcon/> : <MuseumIcon/>}
+                                    startIcon={appliedFilters['nightlife'].selected ? <CloseIcon/> : <NightlifeIcon/>}
                                     onClick={() => toggleFilterSelection('nightlife')}
                                 >
                                     Nightlife
@@ -221,7 +223,7 @@ function SearchBarSection({handleSubmit}) {
                                     }}
                                     variant={appliedFilters['shopping mall'].selected ? 'contained' : 'outlined'}
                                     color={appliedFilters['shopping mall'].selected ? 'error' : 'primary'}
-                                    startIcon={appliedFilters['shopping mall'].selected ? <CloseIcon/> : <MuseumIcon/>}
+                                    startIcon={appliedFilters['shopping mall'].selected ? <CloseIcon/> : <ShoppingBasketIcon/>}
                                     onClick={() => toggleFilterSelection('shopping mall')}
                                 >
                                     Shopping Districts
