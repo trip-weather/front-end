@@ -1,7 +1,28 @@
+.filters-wrapper {
+    display: flex;
+    justify-content: center;
+    background: url("../resources/search-background.jpg") no-repeat;
+    background-size: cover;
+    height: 30rem;
+}
+
 .filters-container {
+    position: relative;
     display: flex;
     flex-direction: column;
+    width: min(75rem, 95%);
+    height: max-content;
     padding: 2rem 0;
+    margin-top: 5rem;
+    background-color: #fff;
+    border-radius: .8rem;
+}
+
+.filter-extend-btn {
+    position: absolute !important;
+    top: 100%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
 }
 
 .upper-filters-container {
@@ -16,7 +37,7 @@
     display: flex;
     justify-content: center;
     gap: 2.5rem;
-    margin-top: .5rem;
+    margin: .8rem 0;
 }
 
 @media (max-width: 767px) {

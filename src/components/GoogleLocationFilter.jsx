@@ -28,7 +28,6 @@ const autocompleteService = {current: null};
 
 export default function GoogleLocationFilter() {
 
-    // TODO refactoring
     const { data, setData } = useContext(SearchContext);
 
     const [value, setValue] = useState(null);
@@ -39,7 +38,7 @@ export default function GoogleLocationFilter() {
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
             loadScript(
-                `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+                `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,geometry`,
                 document.querySelector('head'),
                 'google-maps',
             );

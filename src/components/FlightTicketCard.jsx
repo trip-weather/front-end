@@ -37,7 +37,6 @@ const FlightTicketCard = ({flights}) => {
 
 
         const formatTimeDuration = (duration) => {
-            // Use a regular expression to extract the hour and minute components
             const regex = /PT(\d+)H(\d+)M/;
             const match = duration.match(regex);
 
@@ -46,11 +45,9 @@ const FlightTicketCard = ({flights}) => {
                 const minutes = parseInt(match[2]);
 
                 // Format the components into "01h 59m" format
-                const formattedDuration = `${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
-                return formattedDuration;
+                return `${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
             }
 
-            // If the regular expression doesn't match, return the original duration string
             return duration;
         };
 

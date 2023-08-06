@@ -8,6 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import React, {useState} from "react";
 import {likeHotel, unlikeHotel} from "../services/UserService";
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,8 +57,11 @@ const useStyles = makeStyles((theme) => ({
 const FavoriteHotelCard = ({id, hotelName, city, imageUrl}) => {
     const classes = useStyles();
     const [isLiked, setIsLiked] = useState(true);
+    const navigate = useNavigate();
 
-    const toggleLikedHotel = () => {
+    const toggleLikedHotel = (event) => {
+        event.stopPropagation();
+
         if (!isLiked) {
             likeHotel(id)
                 .then(() => {
@@ -78,7 +82,8 @@ const FavoriteHotelCard = ({id, hotelName, city, imageUrl}) => {
     }
 
     return (
-        <Card className={classes.root}>
+        <Card onClick={() => navigate(`/hotel/${id}?&nearby=`)}
+              className={classes.root}>
             <CardActionArea>
                 <CardMedia className={classes.media} image={imageUrl} title={hotelName}/>
                 <Button className={classes.likeButton} variant="outlined" style={{
@@ -86,16 +91,14 @@ const FavoriteHotelCard = ({id, hotelName, city, imageUrl}) => {
                     color: '#85586F',
                     outline: 'none',
                     border: 'none'
-                }} onClick={toggleLikedHotel}
+                }} onClick={(event) => toggleLikedHotel(event)}
                         endIcon={isLiked ? <FavoriteIcon style={{color: '#85586F'}}/> :
                             <FavoriteBorderIcon/>}>
-                    {/*<span> {isLiked ? 'Added to favourite' : 'Add to favourite'} </span>*/}
                 </Button>
                 <CardContent className={classes.content}>
                     <Typography variant="h6" className={classes.hotelName}>
                         {hotelName}
                     </Typography>
-
                     <Typography variant="body2" className={classes.city}>
                         {city}
                     </Typography>

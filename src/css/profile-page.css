@@ -5,11 +5,28 @@
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeIn 1s ease-in-out forwards;
 }
+
 .avatarContainer {
     display: flex;
     justify-content: center;
     margin-bottom: 16px;
+    animation: slideUp 1s infinite;
+
+}
+@keyframes slideUp {
+    0% {
+        transform: translateY(50%);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(50%);
+    }
 }
 .avatar {
     width: 128px;
@@ -48,7 +65,20 @@
     background-color: #F4F4F4;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid #777
+    border-bottom: 1px solid #777;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeIn 1s ease-in-out forwards;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 .tab {
     font-weight: bold;
@@ -85,23 +115,21 @@
 }
 .reserved-flights-wrapper{
     max-width: 70rem;
-    margin: 0 auto;
+    margin: 2rem auto;
     display: flex;
     flex-wrap: wrap;
     gap: 4rem;
-    justify-content: start;
+    justify-content: flex-start;
 }
 .reserved-hotels-wrapper{
     max-width: 100rem;
-    margin: 0 auto;
+    margin: 2rem auto;
     display: flex;
     flex-wrap: wrap;
     gap: 4rem;
     justify-content: center;
 }
 
-.favourite-hotel-card{
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
-    /*gap: 2rem;*/
+.favourite-hotel-card {
+    width: 100%;
 }

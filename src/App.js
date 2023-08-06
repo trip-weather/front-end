@@ -15,9 +15,8 @@ import SearchPage from './view/SearchPage';
 import SingleHotelPage from "./view/SingleHotelPage";
 import ActivateProfile from "./components/ActivateProfile";
 import PaymentOutcome from "./view/PaymentOutcome";
-import PaymentOutcomeFlight from "./view/PaymentOutcomeFlight";
 import Home from "./view/home/Home";
-import NotFound from "./view/NotFound";
+import NotFoundPage from "./view/NotFoundPage";
 
 
 function App() {
@@ -38,13 +37,12 @@ function App() {
                         <Route element={<PrivateRoutes/>} exact>
                             <Route path='/profile' element={<Profile/>}></Route>
                             <Route path='/payment-outcome' element={<PaymentOutcome/>}></Route>
-                            <Route path='/payment-outcome-flight' element={<PaymentOutcomeFlight/>}></Route>
                         </Route>
                         <Route path='/search' element={<SearchPage/>}></Route>
                         <Route path='/hotel/:id' element={<SingleHotelPage/>}></Route>
                         <Route path='/activate' element={<ActivateProfile/>}></Route>
                         <Route path='' element={<Home/>}></Route>
-                        <Route path='/not-found' element={<NotFound/>}></Route>
+                        <Route path='*' element={<NotFoundPage/>}></Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

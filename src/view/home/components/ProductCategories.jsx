@@ -110,6 +110,7 @@ export default function ProductCategories() {
             <Box sx={{ mt: 8, display: 'flex', flexWrap: 'wrap' }}>
                 {images.map((image) => (
                     <ImageIconButton
+                        href={`/search?selected=${image.title}`}
                         key={image.title}
                         style={{
                             width: image.width,

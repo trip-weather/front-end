@@ -4,11 +4,10 @@ import Typography from "@mui/material/Typography";
 import {CircularProgress, Grid, Pagination} from "@mui/material";
 import HotelCard from "./HotelCard";
 import Box from "@mui/material/Box";
-
 import '../css/found-hotels-section.css'
 
 function FoundHotelsSection({isLoading, hotels}) {
-
+    
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(6);
     const [displayHotels, setDisplayHotels] = useState([]);
@@ -23,7 +22,7 @@ function FoundHotelsSection({isLoading, hotels}) {
         <>
             <Box sx={{backgroundColor: '#fff', padding: '40px 0'}}>
                 <Container>
-                    <Typography variant="h4" component="h2" align="center" gutterBottom>
+                    <Typography sx={{marginBottom: '2rem'}} variant="h4" component="h2" align="center" gutterBottom>
                         Result of search
                     </Typography>
                     {isLoading &&
@@ -42,11 +41,16 @@ function FoundHotelsSection({isLoading, hotels}) {
                             {displayHotels.length > 0 ? (
                                 <div className={'found-hotels-container'}>
                                     {displayHotels.map((hotel) => (
-                                        <HotelCard key={hotel.id} hotel={hotel} sx={{ maxWidth: 345 }} />
+                                        <HotelCard key={hotel.id} hotel={hotel} sx={{maxWidth: 345}}/>
                                     ))}
                                 </div>
                             ) : (
-                                <div>No hotels found.</div>
+                                <Box>
+                                    <Typography variant="h6" component="h2" align="center" gutterBottom>
+                                        No hotels found for the given filters
+                                        <Typography variant="small" align="center"> Apply another variation </Typography>
+                                    </Typography>
+                                </Box>
                             )}
                         </Grid>
                     }
