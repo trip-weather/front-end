@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,18 +12,11 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import HolidayVillageTwoToneIcon from '@mui/icons-material/HolidayVillageTwoTone';
-import {NavLink} from 'react-router-dom';
-import {useContext} from 'react';
+import {NavLink, useNavigate} from 'react-router-dom';
 import AuthContext, {AuthDefaults} from '../contexts/auth.context';
 import {removeAuthToken} from '../services/AuthServicce';
-import {useNavigate} from 'react-router-dom';
 import NotificationContext from '../contexts/notification.context';
-
-
-const pages = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function NavigationMenu() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -57,7 +51,8 @@ function NavigationMenu() {
         <AppBar position="static" style={{backgroundColor: '#D0B8A8'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <HolidayVillageTwoToneIcon sx={{display: {xs: 'none', md: 'flex', color: '#fff !important'}, mr: 1}}/>
+                    <HolidayVillageTwoToneIcon
+                        sx={{display: {xs: 'none', md: 'flex', color: '#fff !important'}, mr: 1}}/>
                     <Typography
                         variant="h6"
                         noWrap
@@ -181,7 +176,7 @@ function NavigationMenu() {
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>*/}
-                                <Avatar sx={{ backgroundColor: '#85586F'}}>M</Avatar>
+                                <Avatar sx={{backgroundColor: '#85586F'}}>M</Avatar>
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -200,18 +195,17 @@ function NavigationMenu() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            <MenuItem></MenuItem>
-                            {/*{settings.map((setting) => (*/}
-                            {/*    <MenuItem key={setting} onClick={handleCloseUserMenu}>*/}
-                            {/*        <Typography textAlign="center">{setting}</Typography>*/}
-                            {/*    </MenuItem>*/}
-                            {/*))}*/}
-
-                            {userAuth.isAuthenticated && <Button variant="text"
-                                                                 to={"/logout"}
-                                                                 onClick={() => logout()}> Logout </Button>}
-
-                            {userAuth.isAuthenticated && <NavLink to={"/profile"}>Profile</NavLink>}
+                            {userAuth.isAuthenticated && <MenuItem>
+                                <Button variant="text"
+                                        to={"/logout"}
+                                        onClick={() => logout()}> Logout </Button>
+                            </MenuItem>
+                            }
+                            {userAuth.isAuthenticated && <MenuItem>
+                                <Button variant="text"
+                                        href={"/profile"}> Profile </Button>
+                            </MenuItem>
+                            }
                         </Menu>
                     </Box>
                 </Toolbar>

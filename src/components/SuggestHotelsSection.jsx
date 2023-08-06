@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import HotelCard from "./HotelCard";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -12,6 +11,7 @@ import 'swiper/css/pagination';
 import {getSuggestedHotels, getSuggestedHotelsByLocation} from "../services/HotelService";
 import {getCityFromLatLng, getUserLocation} from "../services/UserService";
 import {CircularProgress} from "@mui/material";
+import SuggestedHotelCard from "./SuggestedHotelCard";
 
 export default function SuggestHotelsSection() {
 
@@ -97,7 +97,7 @@ export default function SuggestHotelsSection() {
                         >
                             {hotels.map((hotel) => (
                                 <SwiperSlide key={hotel.id}>
-                                    <HotelCard hotel={hotel} sx={{maxWidth: 345}}/>
+                                    <SuggestedHotelCard hotel={hotel} sx={{maxWidth: 345}}/>
                                 </SwiperSlide>
                             ))}
                         </Swiper>

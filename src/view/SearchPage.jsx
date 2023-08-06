@@ -5,9 +5,12 @@ import {useState} from "react";
 import FoundHotelsSection from "../components/FoundHotelsSection";
 import SearchContext, {DefaultSearch} from "../contexts/search.context";
 import {getSuggestedHotels, searchHotels} from "../services/HotelService";
-
+import {useLocation} from "react-router-dom";
 
 function SearchPage() {
+    const {search} = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const selected = queryParams.get('selected')?? null;
 
     const [foundHotels, setFoundHotels] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +44,7 @@ function SearchPage() {
                 .catch(error => {
                     console.error(error)
                     setIsLoading(false);
+                    setFoundHotels([]);
                 });
         }
     }
@@ -49,9 +53,9 @@ function SearchPage() {
         <>
             <SearchContext.Provider value={{data: searchData, setData: setSearchData}}>
                 <SearchBarSection handleSubmit={handleSubmit}/>
-                <SuggestTownsSection  handleSubmit={handleSubmit}/>
+                <SuggestTownsSection handleSubmit={handleSubmit} selected={selected}/>
                 <FoundHotelsSection isLoading={isLoading} hotels={foundHotels}></FoundHotelsSection>
-                {/*<SuggestHotelsSection/>*/}
+                <SuggestHotelsSection/>
             </SearchContext.Provider>
         </>
     )

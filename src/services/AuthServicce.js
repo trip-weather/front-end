@@ -60,7 +60,7 @@ export const getLikedHotels = async () => {
             Authorization: 'Bearer ' + getAuthToken()
         },
 
-        url: `${API_URL_FULL}/user/favouriteHotels`,
+        url: `${API_URL_FULL}/user/favourite-hotels`,
     });
 
     return response.data;

@@ -1,0 +1,26 @@
+.reserved-hotel-card {
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card-action-area:hover {
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hotel-image {
+    width: 96%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out;
+}
+
+.card-action-area:hover .hotel-image {
+    transform: scale(1.1);
+}
+
+.hotel-content {
+    padding: 16px;
+}

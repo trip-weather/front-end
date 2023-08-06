@@ -20,7 +20,8 @@ import NotificationContext from "../contexts/notification.context";
 import '../css/profile-page.css'
 import FavoriteHotelCard from "../components/FavouriteHotelCard";
 import ReservedFlightTicketCard from "../components/ReservedFlightTicketCard";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import ReservedHotelCard from "../components/ReservedHotelCard";
 
 
 const ProfilePage = () => {
@@ -28,7 +29,7 @@ const ProfilePage = () => {
     const {notification, setNotification} = useContext(NotificationContext);
 
     const [tab, setTab] = React.useState('info');
-    const [reservationsTab, setReservationsTab] = React.useState('future-hotels');
+    const [reservationsTab, setReservationsTab] = React.useState('future-flights');
     const [userData, setUserData] = useState({});
     const [userReservedPastHotels, setUserReservedPastHotels] = useState([]);
     const [userReservedFutureHotels, setUserReservedFutureHotels] = useState([]);
@@ -39,6 +40,15 @@ const ProfilePage = () => {
     const [offset, setOffset] = useState(0);
     const [displayHotels, setDisplayHotels] = useState([]);
 
+    const formatDate = (date) => {
+        return new Date(date).toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    }
 
     const [passwordData, setPasswordData] = useState({
         oldPassword: '',
@@ -169,7 +179,7 @@ const ProfilePage = () => {
                 !isLoading &&
                 <Paper sx={{mt: '2rem'}} className="root">
                     <div className="avatarContainer">
-                        <Avatar className="avatar" src={'/path/to/avatar.jpg'} alt="User Avatar"/>
+                        <Avatar style={{backgroundColor: '#85586F'}}>M</Avatar>
                     </div>
                     <Typography variant="h4" className="title">
                         {userData.firstName + ' ' + userData.lastName}
@@ -186,46 +196,45 @@ const ProfilePage = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value="favourite">
-                                {/*<div>*/}
-                                {/*    {userData.favouriteHotels.map((hotel) => (*/}
-                                {/*        <FavoriteHotelCard*/}
-                                {/*            key={hotel.externalId}*/}
-                                {/*            id={hotel.externalId}*/}
-                                {/*            hotelName={hotel.name}*/}
-                                {/*            city={hotel.city}*/}
-                                {/*            imageUrl={hotel.photoMainUrl}*/}
-                                {/*        />*/}
-                                {/*    ))}*/}
-                                {/*</div>*/}
-
-                                {displayHotels.length > 0 ? (
-                                    <div className='favourite-hotel-card'>
-                                        {displayHotels.map((hotel) => (
-                                            <Link to={`/hotel/${hotel.externalId}`} key={hotel.externalId}>
-                                                <FavoriteHotelCard
-                                                    key={hotel.externalId}
-                                                    id={hotel.externalId}
-                                                    hotelName={hotel.name}
-                                                    city={hotel.city}
-                                                    imageUrl={hotel.photoMainUrl}
-                                                />
-                                            </Link>
-                                        ))}
+                                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        justifyContent: 'center',
+                                        gap: '1rem',
+                                        width: '100%'
+                                    }}>
+                                        {displayHotels.length > 0 ? (
+                                            displayHotels.map((hotel) => (
+                                                <div style={{width: '14rem'}}>
+                                                    {/*<Link to={`/hotel/${hotel.externalId}/?nearby=`}*/}
+                                                    {/*      key={hotel.externalId}>*/}
+                                                        <FavoriteHotelCard
+                                                            key={hotel.externalId}
+                                                            id={hotel.externalId}
+                                                            hotelName={hotel.name}
+                                                            city={hotel.city}
+                                                            imageUrl={hotel.photoMainUrl}
+                                                        />
+                                                    {/*</Link>*/}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No added hotels to favourite</div>
+                                        )
+                                        }
                                     </div>
-                                ) : (
-                                    <div>No added hotels to favourite</div>
-                                )
-                                }
-                                <Grid container
-                                      sx={{mt: 4}}
-                                      justifyContent="center"
-                                      alignItems="center" style={{width: '100%'}}>
-                                    <Grid item>
-                                        <Pagination count={Math.ceil(userData.favouriteHotels.length / count)}
-                                                    onChange={(event, page) => setOffset(page - 1)}
-                                                    variant="outlined" color="secondary"/>
+                                    <Grid container
+                                          sx={{mt: 4}}
+                                          justifyContent="center"
+                                          alignItems="center" style={{width: '100%'}}>
+                                        <Grid item>
+                                            <Pagination count={Math.ceil(userData.favouriteHotels.length / count)}
+                                                        onChange={(event, page) => setOffset(page - 1)}
+                                                        variant="outlined" color="secondary"/>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
+                                </Box>
                             </TabPanel>
                             <TabPanel value="password">
                                 <form onSubmit={handleChangePassword}>
@@ -348,18 +357,20 @@ const ProfilePage = () => {
                             <div className='reserved-hotels-container'>
                                 <div className='reserved-hotels-card'>
                                     <div style={{width: '18rem'}}>
-                                        <FavoriteHotelCard
-                                            key={hotel.externalId}
-                                            id={hotel.externalId}
-                                            hotelName={hotel.name}
-                                            city={hotel.city}
-                                            imageUrl={hotel.photoMainUrl}
-                                        />
+                                        <Link to={`/hotel/${hotel.externalId}/?nearby=`} key={hotel.externalId}>
+                                            <ReservedHotelCard
+                                                key={hotel.externalId}
+                                                id={hotel.externalId}
+                                                hotelName={hotel.name}
+                                                city={hotel.city}
+                                                imageUrl={hotel.photoMainUrl}
+                                            />
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className='reservation-container'>
                                     <h4 className='reservation-date'>
-                                        Reservation date: {hotel.reservationDate}
+                                        Reservation date: {`${formatDate(hotel.reservationDate)}`}
                                     </h4>
                                     <h4 className='reservation-date-range'>
                                         Your reservation is from {hotel.checkInDate} to {hotel.checkInDate}
@@ -378,18 +389,20 @@ const ProfilePage = () => {
                             <div className='reserved-hotels-container'>
                                 <div className='reserved-hotels-card'>
                                     <div style={{width: '18rem'}}>
-                                        <FavoriteHotelCard
-                                            key={hotel.externalId}
-                                            id={hotel.externalId}
-                                            hotelName={hotel.name}
-                                            city={hotel.city}
-                                            imageUrl={hotel.photoMainUrl}
-                                        />
+                                        <Link to={`/hotel/${hotel.externalId}/?nearby=`} key={hotel.externalId}>
+                                            <ReservedHotelCard
+                                                key={hotel.externalId}
+                                                id={hotel.externalId}
+                                                hotelName={hotel.name}
+                                                city={hotel.city}
+                                                imageUrl={hotel.photoMainUrl}
+                                            />
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className='reservation-container'>
                                     <h4 className='reservation-date'>
-                                        Reservation date: {hotel.reservationDate}
+                                        Reservation date: {`${formatDate(hotel.reservationDate)}`}
                                     </h4>
                                     <h4 className='reservation-date-range'>
                                         Your reservation is from {hotel.checkInDate} to {hotel.checkInDate}

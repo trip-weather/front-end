@@ -9,8 +9,6 @@ import {Autoplay, Pagination} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import AuthContext from "../contexts/auth.context";
 import PlaceIcon from '@mui/icons-material/Place';
-import StarIcon from "@mui/icons-material/Star";
-import Rating from "@mui/material/Rating";
 import {makeStyles} from "@material-ui/core/styles";
 import Box from "@mui/material/Box";
 import {likeHotel, unlikeHotel} from "../services/UserService";
@@ -43,9 +41,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
         marginTop: theme.spacing(2),
-    },
-    reviewText: {
-        marginTop: theme.spacing(1),
     },
 }));
 const SingleHotelPage = ({}) => {
@@ -80,6 +75,14 @@ const SingleHotelPage = ({}) => {
         setSelectedPhoto(null);
         setIsModalOpen(false);
     };
+    const formatDate = (date) => {
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
+
 
     useEffect(() => {
         setIsHotelReservedByUser(userAuth.user.reserved.includes(Number.parseInt(id)));
@@ -205,7 +208,7 @@ const SingleHotelPage = ({}) => {
                                             }}
                                         >
                                             {hotelData.photos.map((photo, index) => (
-                                                <SwiperSlide style={{height: '100%'}} id={index}
+                                                <SwiperSlide style={{height: '100%', cursor: 'pointer'}} id={index}
                                                              onClick={() => handlePhotoClick(photo)}>
                                                     <img src={photo.urlMax}
                                                          style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
@@ -223,7 +226,8 @@ const SingleHotelPage = ({}) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 position: 'relative',
-                                                width: '1000px',
+                                                width: '100%',
+                                                height: '100%'
                                             }}>
                                                 {selectedPhoto && (
                                                     <img
@@ -232,7 +236,7 @@ const SingleHotelPage = ({}) => {
                                                             width: '100%',
                                                             height: 'auto',
                                                             objectFit: 'contain',
-                                                            maxHeight: '80vh'
+                                                            maxHeight: '80vh',
                                                         }}
                                                         alt={`Hotel Photo ${selectedPhoto.index}`}
                                                     />
@@ -267,29 +271,28 @@ const SingleHotelPage = ({}) => {
                                 <div className='single-hotel-right-container'>
                                     {!isHotelReservedByUserInPeriod &&
                                         <Box className={classes.container}>
-                                            <Typography variant="h6">Reservation Dates</Typography>
+                                            <Typography style={{marginBottom: '1rem'}} variant="h6">Reservation
+                                                Dates</Typography>
                                             <Typography>
-                                                {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
+                                                Check in: <b> {`${formatDate(hotelData.arrivalDate)}`} </b>
+                                            </Typography>
+                                            <Typography style={{marginBottom: '1rem'}}>
+                                                Check out: <b> {`${formatDate(hotelData.departureDate)}`} </b>
                                             </Typography>
                                             <Divider/>
-                                            {/*<div className={classes.ratingContainer}>*/}
-                                            {/*    <StarIcon className={classes.ratingIcon}/>*/}
-                                            {/*    <Typography variant="body2">Rating:</Typography>*/}
-                                            {/*    <Rating value={hotelData.rating} precision={0.5} readOnly/>*/}
-                                            {/*</div>*/}
-                                            <Divider/>
-                                            <Typography variant="body1" className={classes.reviewText}>
-                                                Price per night: {hotelData.pricePerDay}
+                                            <Typography style={{marginTop: '1rem', marginBottom: '1rem'}}
+                                                        variant="body1">
+                                                Price per night: <b> {hotelData.pricePerDay.toFixed(2)} </b>
                                             </Typography>
                                             <Divider/>
-                                            <Typography variant="body1">Total Price
-                                                for {hotelData.nights} days:</Typography>
-                                            <Typography variant="h6" color="primary">
+                                            <Typography style={{marginTop: '1rem'}} variant="body1">
+                                                Total Price for {hotelData.nights} days:</Typography>
+                                            <Typography style={{marginBottom: '1rem'}} variant="h6" color="primary">
                                                 ${hotelData.totalPrice.toFixed(2)}
                                             </Typography>
                                             <Button onClick={handleMakeReservation}
-                                                    variant="contained" style={{backgroundColor: '#85586F'}}>Make a
-                                                reservation
+                                                    variant="contained" style={{backgroundColor: '#85586F'}}>
+                                                Make a reservation
                                             </Button>
                                         </Box>
                                     }
@@ -297,7 +300,7 @@ const SingleHotelPage = ({}) => {
                                         isHotelReservedByUserInPeriod &&
                                         <div>
                                             <Typography variant='h6'>
-                                                {`${hotelData.arrivalDate} - ${hotelData.departureDate}`}
+                                                {`${formatDate(hotelData.arrivalDate)}`} to {`${formatDate(hotelData.departureDate)}`}
                                             </Typography>
                                             <p className='already-booked-text'> You have already booked the hotel </p>
                                             <Button style={{
@@ -336,9 +339,11 @@ const SingleHotelPage = ({}) => {
                                     </React.Fragment>
                                 ))}
                             </div>
-                            <div className="property-list">
+                            <div className="nearby-list">
                                 {Object.keys(hotelData.nearby).map((key, index) => {
-                                    return <NearbyCard key={index} nearby={hotelData.nearby[key]}></NearbyCard>
+                                    return <NearbyCard key={index} filter={key} nearby={hotelData.nearby[key]}
+                                                       hotelLatitude={hotelData.latitude}
+                                                       hotelLongitude={hotelData.longitude}></NearbyCard>
                                 })
                                 }
                             </div>

@@ -4,11 +4,10 @@ import {Paper, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {getCityFromLatLng, getUserLocation} from "../services/UserService";
 import FlightTicketCard from "../components/FlightTicketCard";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import {CircularProgress, FormGroup} from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
+import {CircularProgress, FormControl, InputLabel, Select} from "@mui/material";
 import {getPaymentInfo} from "../services/PaymentService";
 import {getFlightTicketsByDirections} from "../services/FlightTicketService";
+import MenuItem from "@mui/material/MenuItem";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
         width: 'min(800px, 100%)',
     },
     suggestedFlightTicketsHeading: {
-      fontWeight: 600,
-      textAlign: 'center',
-      marginBottom: '3.2rem'
+        fontWeight: 600,
+        textAlign: 'center',
+        marginBottom: '3.2rem'
     },
     suggestedFlightTicketsWarning: {
         padding: '2rem 1.8rem',
@@ -41,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
         // backgroundColor: '#b2102f'
     },
     tickets: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '2.2rem',
-      alignItems: 'center',
-      marginBottom: '5rem'
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2.2rem',
+        alignItems: 'center',
+        marginBottom: '5rem'
     },
     paper: {
         // padding: theme.spacing(3),
@@ -93,65 +92,58 @@ const PaymentOutcome = () => {
     const orderUuid = queryParams.get('order_uuid');
     const classes = useStyles();
 
-
     const [flights, setFlights] = useState([]);
-
     const [reservation, setReservation] = useState(null);
-    const [isCheapestChecked, setIsCheapestChecked] = useState(true);
-    const [isMostExpensiveChecked, setIsMostExpensiveChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
     const [isUserLocationEnabled, setIsUserLocationEnabled] = useState(false);
     const [isFlightTicketLoading, setFlightTicketLoading] = useState(false);
-
-    const [city, setCity] = useState(null);
-
-    const handleCheapestClick = () => {
-        setIsCheapestChecked(true);
-        setIsMostExpensiveChecked(false);
-        // TODO: Handle sorting flights by cheapest
-        console.log('Sort by cheapest flights');
-    };
-
-    const handleMostExpensiveClick = () => {
-        setIsCheapestChecked(false);
-        setIsMostExpensiveChecked(true);
-        // TODO: Handle sorting flights by most expensive
-        console.log('Sort by most expensive flights');
-    };
+    const [destinationCity, setDestinationCity] = useState(null);
+    const [travelClassType, setTravelClassType] = useState('economy');
 
     const fetchUserLocation = async (payment) => {
         setIsUserLocationEnabled(false);
         try {
-
             const location = await getUserLocation();
             if (location !== null) {
 
                 setIsUserLocationEnabled(true);
                 const city = await getCityFromLatLng(location.latitude, location.longitude);
-                setCity(city);
+                setDestinationCity(city);
 
                 const params = {
                     departDate: payment.checkInDate,
                     returnDate: payment.checkOutDate,
                     origin: payment.city,
                     destination: city,
-                    adults: 2
+                    adults: 2,
+                    travelClass: travelClassType
                 };
 
-                setFlightTicketLoading(true);
-                const response = await getFlightTicketsByDirections(params);
-                console.log(response.data.data)
-                setFlights(response.data.data);
-                setFlightTicketLoading(false);
+                await loadFlightTickets(params, true);
             }
         } catch (error) {
             console.error('Error fetching user location:', error);
         }
     };
 
+    const loadFlightTickets = async (params, initial = false) => {
+        if(!initial) {
+            params.departDate = reservation.checkInDate;
+            params.returnDate = reservation.checkOutDate;
+            params.origin = reservation.city;
+            params.destination = destinationCity;
+            params.adults = 2;
+            // params.travelClass = travelClassType;
+        }
 
-    useEffect( () => {
+        setFlightTicketLoading(true);
+        const response = await getFlightTicketsByDirections(params);
+        setFlights(response.data.data);
+        setFlightTicketLoading(false);
+    }
+
+
+    useEffect(() => {
         setIsLoading(true);
         const fetchReservation = async () => {
             try {
@@ -160,28 +152,19 @@ const PaymentOutcome = () => {
                 setIsLoading(false);
 
                 await fetchUserLocation(payment.data);
-            }
-            catch (error) {
+            } catch (error) {
                 setIsLoading(false);
             }
         };
         fetchReservation();
     }, []);
 
-
-    useEffect(() => {}, []);
-
-    const flightData = [
-        {
-            id: 1,
-            airline: 'Airline A',
-            departureCity: 'City X',
-            arrivalCity: 'City Y',
-            departureTime: '08:00 AM',
-            arrivalTime: '10:30 AM',
-            price: 150,
+    useEffect(() => {
+        if (isUserLocationEnabled && !isFlightTicketLoading) {
+            loadFlightTickets({ travelClass: travelClassType })
         }
-    ];
+    }, [travelClassType]);
+
 
     return (
         <div>
@@ -212,53 +195,47 @@ const PaymentOutcome = () => {
                                     Check-out Date: <b> {reservation.checkOutDate} </b>
                                 </Typography>
                                 <Typography variant="body1" className={classes.mainInfo}>
-                                    Total Price: <span>{reservation.price}</span>
+                                    Total Price: <span>{reservation.price} € </span>
                                 </Typography>
                                 <Typography variant="body2" className={classes.otherInfo}>
                                     <i>
-                                        We are looking forward to welcoming you to our hotel. If you have any questions or need assistance, please feel free to contact us.
+                                        We are looking forward to welcoming you to our hotel. If you have any questions
+                                        or need assistance, please feel free to contact us.
                                     </i>
                                 </Typography>
                             </div>
                         </Paper>
                     </div>
-                    <div className={classes.optionContainer}>
-                        {/*<FormGroup>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={*/}
-                        {/*            <Checkbox*/}
-                        {/*                checked={isCheapestChecked}*/}
-                        {/*                onChange={handleCheapestClick}*/}
-                        {/*            />*/}
-                        {/*        }*/}
-                        {/*        label="Cheapest"*/}
-                        {/*    />*/}
-                        {/*</FormGroup>*/}
-                        {/*<FormGroup>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={*/}
-                        {/*            <Checkbox*/}
-                        {/*                checked={isMostExpensiveChecked}*/}
-                        {/*                onChange={handleMostExpensiveClick}*/}
-                        {/*            />*/}
-                        {/*        }*/}
-                        {/*        label="Most Expensive"*/}
-                        {/*    />*/}
-                        {/*</FormGroup>*/}
-                    </div>
-
                     <section className={classes.suggestedFlightTicketsSection}>
                         <div className={classes.suggestedFlightTicketsSectionContainer}>
-                            <Typography className={classes.suggestedFlightTicketsHeading} variant='h3'> Suggested flight tickets </Typography>
+                            <Typography className={classes.suggestedFlightTicketsHeading} variant='h3'>
+                                Suggested flight tickets
+                            </Typography>
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <FormControl sx={{width: '300px', marginBottom: '2rem'}}
+                                             disabled={isFlightTicketLoading}
+                                             svariant="outlined">
+                                    <InputLabel>Travel Class</InputLabel>
+                                    <Select value={travelClassType} onChange={(e) => setTravelClassType(e.target.value)}
+                                            label="Travel Class">
+                                        <MenuItem value="economy">Economy</MenuItem>
+                                        <MenuItem value="premium_economy">Premium Economy</MenuItem>
+                                        <MenuItem value="business">Business</MenuItem>
+                                        <MenuItem value="first-class">First Class</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </div>
                             {
                                 (!isUserLocationEnabled && !isFlightTicketLoading) &&
-                                <Typography className={classes.suggestedFlightTicketsWarning} align='center' variant='h5'> You should enable your browser location! </Typography>
+                                <Typography className={classes.suggestedFlightTicketsWarning} align='center'
+                                            variant='h5'> You should enable your browser location! </Typography>
                             }
 
                             {(isUserLocationEnabled && isFlightTicketLoading) &&
                                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                     <CircularProgress/>
-                                    <Typography variant="body2" color="textSecondary" component="span" style={{marginTop: 10}}>
+                                    <Typography variant="body2" color="textSecondary" component="span"
+                                                style={{marginTop: 10}}>
                                         Fetching the most suitable flights for your
                                     </Typography>
                                 </div>
