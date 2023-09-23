@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Weather Trip
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to WeatherTrip, your ultimate vacation planning platform that combines weather information,
+hotel options, and flight tickets to help you find your dream vacation.
 
-## Available Scripts
+## Introduction
 
-In the project directory, you can run:
+WeatherTrip is a comprehensive and convenient solution for travelers seeking the perfect vacation.
+By integrating weather forecasts, hotel options, and flight tickets in one platform, we aim to simplify the travel planning process
+and make it an enjoyable experience.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Weather Forecast**: Find cities with your desired weather conditions using our temperature API interface.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Google Maps**: Explores nearby points of interest to enhance your travel experience.
 
-### `npm test`
+- **Hotel Catalog**: Explore an extensive collection of hotels in various cities. Apply filters to discover the ideal hotel that meets your requirements.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Flight Tickets**: Let us take care of your transportation needs by utilizing the flight ticket API.
 
-### `npm run build`
+- **Easy Booking**: Once you've found the right hotel or flight, book and pay seamlessly using your bank card with the Stripe API integration.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Future Enhancements
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+I am dedicated to continuously improving WeatherTrip. Future enhancements include:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Additional Filters: Enhance your search by adding filters for adults, children, rooms, price, rating, and star categories.
+- Interactive Maps: Visualize destinations and hotel locations on an interactive map.
+- Reviews and Recommendations: Incorporate user reviews and recommendations for hotels and destinations.
 
-### `npm run eject`
+## Technologies Used
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Spring Boot**: Backend framework for building robust and scalable applications.
+- **React**: Frontend library for building dynamic and interactive user interfaces.
+- **Material-UI (MUI)**: React UI framework for creating modern designs.
+- **MySQL**: Relational database management system for storing structured data.
+- **Redis**: In-memory data store for caching and improving application performance.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Home Page
+![Home Page](images/home-page.png)
+At WeatherTrip, we understand that the perfect vacation starts with the perfect destination.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Top Travel Destinations](images/top-travel-destinations.png)
+The section where you can directly select your city.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Search Page
+![Search Bar](images/search-page.png)
+- Begin by selecting your favorite city from our extensive list of options.
+- Next, indicate your desired temperature range. Whether you're longing for a tropical paradise or a cozy winter escape,
+  our platform will filter hotels that match your climate preferences.
+- But that's not all - you can filter your hotel options based on the season you wish to travel in.
 
-## Learn More
+![Search Bar](images/filters.png)
+- The addition of the "More Filters button" feature introduces a new level of customization, allowing users to
+  align their hotel selection with their interests and activities.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![Found Hotels](images/found-hotels.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Hotel Detailed Page
+![Hotel Details](images/hotel-detailed-page.png)
+- Delve into a wealth of information about your selected hotel.
+  ![Hotel Details](images/nearby.png)
+  ![Successful Reservation](images/successful-reservation.png)
+- Furthermore, users don't have to worry about transportation as the application can
+  take care of that by suggesting the flight tickets.
+  ![Flights](images/flights.png)

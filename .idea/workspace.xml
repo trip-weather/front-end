@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a06abb50-f80b-4136-9798-3dc82dfa9988" name="Changes" comment="[trip-07] moved the pagination only if hotels are found">
+      <change beforePath="$PROJECT_DIR$/src/css/single-hotel-page.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/single-hotel-page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/FlightTicketService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/FlightTicketService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/constants.js" afterDir="false" />
+    </list>
+    <list id="7563fc93-67e5-48f4-b7d8-fb0d93f6e5e6" name="Changes by teranshil" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2SbInfIL3e30q4xxNZ6QZfwhTkK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/projects/WeatherTrip/front-end/weathertrip/src/view/home/components&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\Downloads\\WebStorm 2022.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\view\home\components" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\public" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\view" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\resources" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\view\home\components" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\view\home" />
+      <recent name="D:\projects\WeatherTrip\front-end\weathertrip\src\components" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a06abb50-f80b-4136-9798-3dc82dfa9988" name="Changes" comment="" />
+      <created>1689409023623</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1689409023623</updated>
+      <workItem from="1689409063114" duration="14749000" />
+      <workItem from="1689491935150" duration="138000" />
+      <workItem from="1689492092004" duration="55629000" />
+      <workItem from="1689696170593" duration="71268000" />
+      <workItem from="1690267418876" duration="1724000" />
+      <workItem from="1690293145172" duration="6025000" />
+      <workItem from="1690352320320" duration="2777000" />
+      <workItem from="1690361056276" duration="5119000" />
+      <workItem from="1690378414758" duration="19439000" />
+      <workItem from="1690479943399" duration="33463000" />
+      <workItem from="1690701547396" duration="65168000" />
+      <workItem from="1690959487367" duration="12334000" />
+      <workItem from="1690988350312" duration="42985000" />
+      <workItem from="1691130446134" duration="26735000" />
+      <workItem from="1691221197362" duration="6609000" />
+      <workItem from="1691306412575" duration="10241000" />
+      <workItem from="1691348288949" duration="617000" />
+      <workItem from="1691391109531" duration="713000" />
+      <workItem from="1691393274208" duration="6858000" />
+      <workItem from="1691492926095" duration="1366000" />
+      <workItem from="1691582096592" duration="4819000" />
+      <workItem from="1694246235470" duration="2946000" />
+    </task>
+    <task id="LOCAL-00001" summary="[trip-07] moved the pagination only if hotels are found">
+      <created>1691343217106</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1691343217106</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[trip-07] removed unnecessary files and the design has been improved" />
+    <MESSAGE value="[trip-07] moved the pagination only if hotels are found" />
+    <option name="LAST_COMMIT_MESSAGE" value="[trip-07] moved the pagination only if hotels are found" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/SearchBarSection.jsx</url>
+          <line>110</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/view/ProfilePage.jsx</url>
+          <line>353</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/view/ProfilePage.jsx</url>
+          <line>376</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
