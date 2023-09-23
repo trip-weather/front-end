@@ -1,0 +1,54 @@
+@keyframes scaleUp {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+.town-button {
+    transition: transform 0.2s ease;
+}
+
+.town-button:hover {
+    animation: scaleUp 0.2s;
+}
+
+.towns-container {
+    display: flex;
+    flex-wrap: wrap;
+    opacity: 0; /* Initially set to invisible */
+    animation: fadeIn 0.5s ease-in forwards; /* Define the fade-in animation */
+}
+
+/* Fade-in animation keyframes */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Styling for individual town buttons */
+.towns-container > .falling-animation {
+    margin-bottom: 10px;
+}
+
+/* Falling animation for town buttons */
+@keyframes fallingAnimation {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Apply falling animation to town buttons */
+.towns-container .falling-animation {
+    border-radius: 5px;
+    width: 100%;
+    animation: fallingAnimation 0.5s ease-in-out;
+}

@@ -1,12 +1,19 @@
 import { createContext } from "react";
-import { checkIsUserAuthenticated, getUserId, getUserRole, getUserName } from "../services/AuthServicce";
+import {
+    checkIsUserAuthenticated,
+    getUserUuid,
+    getUserRole,
+    getLikedHotels,
+    getUserReservations
+} from "../services/AuthServicce";
 
 export const AuthDefaults = {
     isAuthenticated: checkIsUserAuthenticated(),
     user: {
-        // id: getUserId(),
-        role: getUserRole()
-        // username: getUserName()
+        id: getUserUuid(),
+        role: getUserRole(),
+        liked: await getLikedHotels(),
+        reserved: await getUserReservations()
     },
 };
 

@@ -1,0 +1,24 @@
+.found-hotels-container {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-items: center;
+    grid-column-gap: 1.5rem;
+    grid-row-gap: 2.4rem;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+@media (max-width: 767px) {
+    .found-hotels-container {
+        grid-template-columns: 1fr;
+    }
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
